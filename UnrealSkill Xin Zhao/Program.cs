@@ -32,8 +32,9 @@ namespace UnrealSkill
         public static Spell.Active W, Q, R;
         public static Spell.Skillshot Flash;
         public static Spell.Targeted Ignite, E;
-        public static Menu Menu, DrawMenu, AddonMenu;
+        public static Menu Menu, AddonMenu;
         static Item Mercurial;
+        static Item Tiamat, Hydra, BOTRK, Bilgewater, Hextech, Youmuu;
         public static String NomeChamp = "XinZhao";
 
         static void Main(string[] args)
@@ -59,6 +60,14 @@ namespace UnrealSkill
                 Ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
 
             Mercurial = new Item(3137);
+            BOTRK = new Item(3153, 550);
+            Bilgewater = new Item(3144, 550);
+            Hydra = new Item(3074, 400);
+            Tiamat = new Item(3077, 400);
+            Hextech = new Item(3146,550);
+            Youmuu = new Item(3142);
+
+
             //-------------------------------------------------------CHAT -----------------------------------------------------------
             //Chat.Print(ObjectManager.Player.Model.ToString());
             Chat.Print("|| UnrealSkill " + NomeChamp + " || <font color='#7a7a7a'>Carregado / Load V1</font>", System.Drawing.Color.WhiteSmoke);
@@ -81,18 +90,26 @@ namespace UnrealSkill
             AddonMenu.Add("WCombo", new CheckBox("|| " + NomeChamp + " Usar / Use W || (Active)", true));
             AddonMenu.Add("ECombo", new CheckBox("|| " + NomeChamp + " Usar / Use E || (Targed)", true));
             AddonMenu.Add("RCombo", new CheckBox("|| " + NomeChamp + " Usar / Use R || (Active)", true));
-            AddonMenu.AddLabel("Ultimate sera Usada se ouver 1 ou Mais Inimigos dentro do Range da Ult");
+            AddonMenu.AddLabel("Set the mode of Use Below Skills / Configure o Modo de Uso Abaixo das Habilidades");
+            AddonMenu.AddLabel("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Q & E");
+            AddonMenu.AddLabel("Time to Turn Skills Q & E / Tempo para Ativar Habilidades Q & E");
+            var ActiveSkills = AddonMenu.Add("ActiveSkillsMod", new Slider(" TEXT", 2, 1, 2));
+            var TMode = new[] { NomeChamp, "A - Before activating Skills / Ativar Habilidades Antes", "B - After activating Skills / Ativar Habilidades Depois" };
+            ActiveSkills.DisplayName = TMode[ActiveSkills.CurrentValue];
+            ActiveSkills.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = TMode[changeArgs.NewValue]; };
+
             AddonMenu.AddLabel("|| Automation ||");
             AddonMenu.Add("AutoKS", new CheckBox("|| " + NomeChamp + " Using Automatically (Killsteal) ||", true));
             AddonMenu.Add("Auto Ignity", new CheckBox("|| " + NomeChamp + " Using Automatically (Ignity) ||", true));
-            AddonMenu.Add("LastHitMin", new CheckBox("|| " + NomeChamp + " LaneClear (E LastHit Minions) ||", true));
-            AddonMenu.Add("LaneClearFarmE", new CheckBox("|| " + NomeChamp + " LaneClear (E) ||", true));
+            AddonMenu.Add("LastHitMin", new CheckBox("|| " + NomeChamp + " LaneClear (E LastHit Minions) ||", false));
+            AddonMenu.Add("LaneClearFarmE", new CheckBox("|| " + NomeChamp + " LaneClear (E) ||", false));
+            AddonMenu.Add("UseItems", new CheckBox("|| " + NomeChamp + " Use Items ||", true));
             AddonMenu.AddLabel("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Draw");
             AddonMenu.Add("DesabilitaDraw", new CheckBox("|| " + NomeChamp + " My Range || (Atk Range)", true));
-            AddonMenu.Add("DesabilitaDrawQ", new CheckBox("|| " + NomeChamp + " Q Range || (My Spell)", true));
-            AddonMenu.Add("DesabilitaDrawW", new CheckBox("|| " + NomeChamp + " W Range || (My Spell)", true));
+            AddonMenu.Add("DesabilitaDrawQ", new CheckBox("|| " + NomeChamp + " Q Range || (My Spell)", false));
+            AddonMenu.Add("DesabilitaDrawW", new CheckBox("|| " + NomeChamp + " W Range || (My Spell)", false));
             AddonMenu.Add("DesabilitaDrawE", new CheckBox("|| " + NomeChamp + " E Range || (My Spell)", true));
-            AddonMenu.Add("DesabilitaDrawR", new CheckBox("|| " + NomeChamp + " R Range || (My Spell)", true));
+            AddonMenu.Add("DesabilitaDrawR", new CheckBox("|| " + NomeChamp + " R Range || (My Spell)", false));
             AddonMenu.Add("DesabilitaDrawLine", new CheckBox("|| Get Line TargetSelector || (Enemy)", true));
             AddonMenu.AddLabel("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  SkinHack");
             AddonMenu.Add("UseSkinHack", new CheckBox("|| " + NomeChamp + "  Use SkinHack || (F5)", true));
@@ -302,7 +319,7 @@ namespace UnrealSkill
         public static void LastHit()
         {
             var qcheck = Program.AddonMenu["LastHitMin"].Cast<CheckBox>().CurrentValue;
-            if (!E.IsReady()) return;
+            if (qcheck &&!E.IsReady()) return;
             {
                 var minion = (Obj_AI_Minion)MinionLh(GameObjectType.obj_AI_Minion, AttackSpell.E);
                 if (minion != null)
@@ -324,16 +341,20 @@ namespace UnrealSkill
 
         public static void Jungle()
         {
-            var monster =
-                    EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position,Q.Range)
+            var monster = EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position,E.Range)
                         .FirstOrDefault(e => e.IsValidTarget());
 
-            if (E.IsReady() && monster.IsValidTarget(E.Range))
+            if (E.IsReady() && monster.IsValidTarget(600))
             {
                 E.Cast(monster);
             }
 
-            if (Q.IsReady() && monster.IsValidTarget(Q.Range))
+            if (W.IsReady() && monster.IsValidTarget(600))
+            {
+                W.Cast();
+            }
+
+            if (Q.IsReady() && monster.IsValidTarget(600))
             {
                 Q.Cast();
             }
@@ -409,16 +430,34 @@ namespace UnrealSkill
             {
                  if (AddonMenu["QCombo"].Cast<CheckBox>().CurrentValue)
                 {
-                     if (Q.IsReady() && Player.Instance.CountEnemiesInRange(200) > 0)
+                     if (Q.IsReady())
                         {
-                            Q.Cast();
+                            var SelectMode = Program.AddonMenu["ActiveSkillsMod"].DisplayName;
+                            switch (SelectMode)
+                            {
+                                case "A - Before activating Skills / Ativar Habilidades Antes":
+                                    if (Inimigo.IsValidTarget(600)) Q.Cast();
+                                    break;
+                                case "B - After activating Skills / Ativar Habilidades Depois":
+                                    if (Inimigo.IsValidTarget(200)) Q.Cast();
+                                    break;
+                            }
                         }
                 }
                 if (AddonMenu["WCombo"].Cast<CheckBox>().CurrentValue)
                 {
-                    if (W.IsReady() && Player.Instance.CountEnemiesInRange(200) > 0)
+                    if (W.IsReady())
                     {
-                        W.Cast();
+                        var SelectMode = Program.AddonMenu["ActiveSkillsMod"].DisplayName;
+                        switch (SelectMode)
+                        {
+                            case "A - Before activating Skills / Ativar Habilidades Antes":
+                                if (Inimigo.IsValidTarget(600)) W.Cast();
+                                break;
+                            case "B - After activating Skills / Ativar Habilidades Depois":
+                                if (Inimigo.IsValidTarget(200)) W.Cast();
+                                break;
+                        }
                     }
                 }
                 if (AddonMenu["ECombo"].Cast<CheckBox>().CurrentValue)
@@ -437,6 +476,40 @@ namespace UnrealSkill
                     }
 
                 }
+
+                if (AddonMenu["UseItems"].Cast<CheckBox>().CurrentValue)
+                {
+                    if (Inimigo.IsValidTarget(400) && Tiamat.IsReady()) Tiamat.Cast();
+                    if (Inimigo.IsValidTarget(400) && Hydra.IsReady()) Hydra.Cast();
+                    if (Inimigo.IsValidTarget(200) && Youmuu.IsReady()) Youmuu.Cast();
+
+
+                    if (Inimigo.IsValidTarget(200) && BOTRK.IsReady()) BOTRK.Cast(Inimigo);
+                    if (Inimigo.IsValidTarget(550) && Bilgewater.IsReady()) Bilgewater.Cast(Inimigo);
+                    if (Inimigo.IsValidTarget(200) && Hextech.IsReady()) Hextech.Cast(Inimigo);
+
+
+                  
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
         }
     }

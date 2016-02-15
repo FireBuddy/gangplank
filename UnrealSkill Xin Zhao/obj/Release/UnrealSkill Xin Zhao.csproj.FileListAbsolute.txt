@@ -9,3 +9,14 @@ C:\Users\Onix\Desktop\UnrealSkill Xin Zhao\obj\Release\UnrealSkill.pdb
 C:\Users\Onix\Desktop\UnrealSkill Xin Zhao\bin\Release\EloBuddy.dll
 C:\Users\Onix\Desktop\UnrealSkill Xin Zhao\bin\Release\EloBuddy.SDK.dll
 C:\Users\Onix\Desktop\UnrealSkill Xin Zhao\bin\Release\SharpDX.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\UnrealSkill.exe.config
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\UnrealSkill.exe
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\UnrealSkill.pdb
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\EloBuddy.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\EloBuddy.SDK.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\SharpDX.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\bin\Release\Newtonsoft.Json.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\obj\Release\UnrealSkill Xin Zhao.csprojResolveAssemblyReference.cache
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\obj\Release\UnrealSkill.exe
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\UnrealSkill Xin Zhao\obj\Release\UnrealSkill.pdb
