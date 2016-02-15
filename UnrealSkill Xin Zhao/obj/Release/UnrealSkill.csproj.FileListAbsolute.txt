@@ -1,0 +1,11 @@
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\UnrealSkill.exe.config
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\UnrealSkill.exe
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\UnrealSkill.pdb
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\EloBuddy.dll
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\EloBuddy.SDK.dll
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\SharpDX.dll
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Onix\Desktop\UnrealSkill Templante\bin\Release\Newtonsoft.Json.dll
+C:\Users\Onix\Desktop\UnrealSkill Templante\obj\Release\UnrealSkill.csprojResolveAssemblyReference.cache
+C:\Users\Onix\Desktop\UnrealSkill Templante\obj\Release\UnrealSkill.exe
+C:\Users\Onix\Desktop\UnrealSkill Templante\obj\Release\UnrealSkill.pdb
