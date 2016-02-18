@@ -424,7 +424,7 @@ namespace UnrealSkill
             }
             AutoIgnity();
 
-            var Inimigo = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+            var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);
             if (!Inimigo.IsValid()) return;
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
