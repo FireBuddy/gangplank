@@ -408,9 +408,45 @@ namespace UnrealSkill_Shen
         /// </summary>
         /// <param name="args"></param>
         /// 
+        public static void COMBO()
+        {
+            var Inimigo = TargetSelector.GetTarget(700, DamageType.Magical);
+           // if (!Inimigo.IsValid()) return;
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                {
+                     if (Q.IsReady() && Q.IsInRange(Inimigo) && (AddonMenu["QCombo"].Cast<CheckBox>().CurrentValue))
+                        {
+                            Q.Cast(Inimigo);
+                         //   Chat.Print("[Q] Usado");
+                        }
+                }
+                if (AddonMenu["WCombo"].Cast<CheckBox>().CurrentValue)
+                {
+                    if (W.IsReady() && Player.Instance.CountEnemiesInRange(150) > 0)
+                    {
+                        W.Cast();
+                      //  Chat.Print("[W] Usado");
+                    }
+                }
+                if (AddonMenu["ECombo"].Cast<CheckBox>().CurrentValue)
+                {
+                    if (E.IsReady() && Player.Instance.CountEnemiesInRange(610) > 0)
+                    {
+                        E.Cast();
+                     //   Chat.Print("[E] Usado");
+                    }
+                }
+
+                Rincombo();
+        }
+
+        }
+
 
         private static void Game_OnUpdate(EventArgs args)
         {
+            COMBO();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
                 LastHit();
@@ -430,35 +466,8 @@ namespace UnrealSkill_Shen
                 LoadingSkin();
             }
             AutoIgnity();
-
-            var Inimigo = TargetSelector.GetTarget(700, DamageType.Magical);
-            if (!Inimigo.IsValid()) return;
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                {
-                     if (Q.IsReady() && Q.IsInRange(Inimigo) && (AddonMenu["QCombo"].Cast<CheckBox>().CurrentValue))
-                        {
-                            Q.Cast(Inimigo);
-                        }
-                }
-                if (AddonMenu["WCombo"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (W.IsReady() && Player.Instance.CountEnemiesInRange(150) > 0)
-                    {
-                        W.Cast();
-                    }
-                }
-                if (AddonMenu["ECombo"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (E.IsReady() && Player.Instance.CountEnemiesInRange(610) > 0)
-                    {
-                        E.Cast();
-                    }
-                }
-
-                Rincombo();
             }
           
         }
     }
-}
+

@@ -401,27 +401,8 @@ namespace UnrealSkill
         /// </summary>
         /// <param name="args"></param>
         /// 
-
-        private static void Game_OnUpdate(EventArgs args)
+        public static void Combo()
         {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
-            {
-                LastHit();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                LaneClear();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-            {
-                Jungle();
-            }
-
-            if (Player.Instance.CountEnemiesInRange(E.Range) > 0) Killsteal();
-            if (AddonMenu["UseSkinHack"].Cast<CheckBox>().CurrentValue)
-            {
-                LoadingSkin();
-            }
             AutoIgnity();
 
             var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);
@@ -491,26 +472,30 @@ namespace UnrealSkill
 
                   
                 }
+        }
+      }
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            Combo();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+            {
+                LastHit();
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                LaneClear();
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+                Jungle();
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            if (Player.Instance.CountEnemiesInRange(E.Range) > 0) Killsteal();
+            if (AddonMenu["UseSkinHack"].Cast<CheckBox>().CurrentValue)
+            {
+                LoadingSkin();
+            }
             }
         }
     }
-}
+
