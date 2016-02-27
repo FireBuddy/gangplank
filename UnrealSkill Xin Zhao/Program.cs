@@ -40,7 +40,9 @@ namespace UnrealSkill
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Game_OnStart;
-            EloBuddy.Hacks.RenderWatermark = false;
+           // EloBuddy.Hacks.RenderWatermark = false;
+            Drawing.OnDraw += Game_OnDraw;
+            Game.OnUpdate += Game_OnUpdate;
         }
         /// <summary>
         /// /////////////////////////////////////////////////////////GAME ON START -> MENU -> SPELL -> ITEM/////////////////////////////////////////
@@ -118,8 +120,6 @@ namespace UnrealSkill
             SkinHack.DisplayName = ID[SkinHack.CurrentValue];
             SkinHack.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = ID[changeArgs.NewValue]; };;
           //  Player.SetModel("XinZhao");
-            Drawing.OnDraw += Game_OnDraw;
-            Game.OnUpdate += Game_OnUpdate;
         }
 
 
@@ -401,29 +401,26 @@ namespace UnrealSkill
         /// </summary>
         /// <param name="args"></param>
         /// 
-        public static void Combo()
+        public static  void Combo()
         {
-            AutoIgnity();
-
             var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);
-            if (!Inimigo.IsValid()) return;
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            if (Inimigo.IsValid())
             {
-                 if (AddonMenu["QCombo"].Cast<CheckBox>().CurrentValue)
+                if (AddonMenu["QCombo"].Cast<CheckBox>().CurrentValue)
                 {
-                     if (Q.IsReady())
+                    if (Q.IsReady())
+                    {
+                        var SelectMode = Program.AddonMenu["ActiveSkillsMod"].DisplayName;
+                        switch (SelectMode)
                         {
-                            var SelectMode = Program.AddonMenu["ActiveSkillsMod"].DisplayName;
-                            switch (SelectMode)
-                            {
-                                case "A - Before activating Skills / Ativar Habilidades Antes":
-                                    if (Inimigo.IsValidTarget(600)) Q.Cast();
-                                    break;
-                                case "B - After activating Skills / Ativar Habilidades Depois":
-                                    if (Inimigo.IsValidTarget(200)) Q.Cast();
-                                    break;
-                            }
+                            case "A - Before activating Skills / Ativar Habilidades Antes":
+                                if (Inimigo.IsValidTarget(600)) Q.Cast();
+                                break;
+                            case "B - After activating Skills / Ativar Habilidades Depois":
+                                if (Inimigo.IsValidTarget(200)) Q.Cast();
+                                break;
                         }
+                    }
                 }
                 if (AddonMenu["WCombo"].Cast<CheckBox>().CurrentValue)
                 {
@@ -468,15 +465,17 @@ namespace UnrealSkill
                     if (Inimigo.IsValidTarget(200) && BOTRK.IsReady()) BOTRK.Cast(Inimigo);
                     if (Inimigo.IsValidTarget(550) && Bilgewater.IsReady()) Bilgewater.Cast(Inimigo);
                     if (Inimigo.IsValidTarget(200) && Hextech.IsReady()) Hextech.Cast(Inimigo);
-
-
-                  
                 }
-        }
+            }
       }
+
         private static void Game_OnUpdate(EventArgs args)
         {
-            Combo();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                Combo();
+                AutoIgnity();
+            }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
                 LastHit();
