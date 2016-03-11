@@ -752,6 +752,30 @@ namespace Skin
             }
             if (NomeChamp == "MonkeyKing")
             {
+                foreach (var Objeto in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValid && o.BaseSkinName == "MonkeyKing"))
+                {
+                    switch (SkinHackSelect)
+                    {
+                        case "Classic":
+                            Objeto.SetSkinId(0);
+                            break;
+                        case "SkinHack 1":
+                            Objeto.SetSkinId(1);
+                            break;
+                        case "SkinHack 2":
+                            Objeto.SetSkinId(2);
+                            break;
+                        case "SkinHack 3":
+                            Objeto.SetSkinId(3);
+                            break;
+                        case "SkinHack 4":
+                            Objeto.SetSkinId(4);
+                            break;
+                        case "SkinHack 5":
+                            Objeto.SetSkinId(5);
+                            break;
+                    }
+                }
             }
             if (NomeChamp == "Xerath")
             {
@@ -851,15 +875,12 @@ namespace Skin
         //ModelHack
      public static void ActiveModelHack()
         {
-            if (Menu["UseModelHack"].Cast<CheckBox>().CurrentValue)
-            {
                 if (Menu.Get<KeyBind>("ModelLoad").CurrentValue)
                 {
                     var ModelHackSelect = Program.Menu["ModelID"].DisplayName;
                     Player.Instance.SetModel(ModelHackSelect);
                     Chat.Print("|| SkinHack 2016 BETA || <font color='#ff0000'>Carregado / Load ModelHack " + ModelHackSelect + "</font>", System.Drawing.Color.White);
                 }
-            }
         }
         //Ward Skin
      public static void WardSKinHack()
@@ -912,8 +933,8 @@ namespace Skin
 
         private static void Game_Atualizar(EventArgs args)
         {
-                LoadingSkin();
-                ActiveModelHack();
+            if (Menu["UseSkinHack"].Cast<CheckBox>().CurrentValue) LoadingSkin();
+            if (Menu["UseModelHack"].Cast<CheckBox>().CurrentValue) ActiveModelHack();
              //   WardSKinHack();
         }
     }
