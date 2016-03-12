@@ -19,8 +19,16 @@ namespace UnrealSkill_Shen
 {
     class Program
     {
-        private float lastPing;
-
+        public static SpellSlot Smite;
+        public static int GetSmiteDamage()
+        {
+            return new int[] { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }
+                [Player.Instance.Level - 1];
+        }
+        public static bool SmiteReady()
+        {
+            return Player.GetSpell(Smite).IsReady;
+        }
         public AIHeroClient myTarget = null;
         public static Spell.Active Q;
         public static Spell.Active W;
@@ -49,6 +57,14 @@ namespace UnrealSkill_Shen
             { MinimumHitChance = HitChance.High };
             R = new Spell.Targeted(SpellSlot.R, 25000);
 
+            foreach (var spell in
+                       Player.Instance.Spellbook.Spells.Where(
+                         i =>
+                               i.Name.ToLower().Contains("smite") &&
+            (i.Slot == SpellSlot.Summoner1 || i.Slot == SpellSlot.Summoner2)))
+            {
+                Smite = spell.Slot;
+            }
 
             //Atk
             BOTRK = new Item(3153, 550);
@@ -63,54 +79,71 @@ namespace UnrealSkill_Shen
             Chat.Print("||  UnrealSkill ||" + NomeChamp + "  <font color='#15c757'>Carregado / Load</font>", System.Drawing.Color.White);
             //-------------------------------------------------------MENU ------------------------------------------------------------
             Menu = MainMenu.AddMenu("[ Shen ]", "USV");
+            Menu.AddSeparator(5);
+            Menu.AddLabel("Logs:" + System.Environment.NewLine);
+            Menu.AddLabel("✔ Add SkinHack");
+                   Menu.AddLabel("✔ Add Killsteal Auto Jungle Baron & Dragon" + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Logic Auto Check Enemy Range for Ultimate" + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Use [Q] JungleClear"  + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Use [Q] LaneClear"  + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add 2 Logic For using [w]" + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add 2 Logic For using [E]"  + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Ant Gapcloser using [E]"  + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Auto InterruptableSpell using [E]" + System.Environment.NewLine);
+                   Menu.AddLabel("✔ Add Reset (AA) using Item" + System.Environment.NewLine);
+                   Menu.AddLabel("✖ Version 1.4");
+
             Menu.AddGroupLabel("  ◣  Items ◥");
             Menu.Add("UseItemAtk", new CheckBox("✔  " + NomeChamp + "  Use Offensive Items", true));
             Menu.Add("UseItemDef", new CheckBox("✔  " + NomeChamp + "  Use Items Defensive", true));
             Menu.AddGroupLabel("  ◣  Combo ◥");
             Menu.Add("QCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use Q [Combo]", true));
+            Menu.Add("QLane", new CheckBox("✔  " + NomeChamp + " Usar / Use Q [LaneClear]", true));
+            Menu.Add("QJungle", new CheckBox("✔  " + NomeChamp + " Usar / Use Q [JungleClear]", true));
+            Menu.Add("Smith", new CheckBox("✔  " + NomeChamp + " Usar / Use Smith [Dragon/Baron]", true));
             Menu.AddGroupLabel("  ◣  [W] Modes ◥");
             Menu.Add("WCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use W [Combo]", true));
             var ShieldMode = Menu.Add("ShieldMode", new Slider("Cast (W Mode)", 1, 1, 2));
-            var Shield = new[] { NomeChamp, "[ 1 Use Aways ]", "[ 2 Use Logic Count Enemy ]" };
+            var Shield = new[] { NomeChamp, "[ Use Aways ]", "[ Use Logic Count Enemy ]" };
             ShieldMode.DisplayName = Shield[ShieldMode.CurrentValue];
             ShieldMode.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = Shield[changeArgs.NewValue]; };
             
             Menu.AddGroupLabel("  ◣  [E] Modes ◥");
             Menu.Add("ECombo", new CheckBox("✔  " + NomeChamp + " Usar / Use E [Combo]", true));
             var TauntMode = Menu.Add("TauntModes", new Slider("Cast (E Mode)   ||    1 Use Fast for Range || 2 Use Logic Max Range    ||", 1, 1, 2));
-            var TMode = new[] { NomeChamp, "[ 1 Use Fast ]", "[ 2 Use Max Range ]" };
+            var TMode = new[] { NomeChamp, "[ Use Fast ]", "[ Use Max Range ]" };
             TauntMode.DisplayName = TMode[TauntMode.CurrentValue];
             TauntMode.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = TMode[changeArgs.NewValue]; };
             Menu.AddGroupLabel("  ◣  [R] Ultimate ◥");
             Menu.Add("RCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use R [Config]", true));
             foreach (var allies in EntityManager.Heroes.Allies.Where(i => !i.IsMe))
-            { Menu.Add("SalvaAliado" + allies.ChampionName, new CheckBox("Save: " + allies.ChampionName, true));}
-            Menu.Add("SaveUlt", new Slider("% HP For R (Recommend 15%) Auto check Enemy within the dangerous range", 15, 0, 100));
+            { Menu.Add("SalvaAliado" + allies.ChampionName, new CheckBox("Ultimate in: " + allies.ChampionName, true));}
+            Menu.Add("SaveUlt", new Slider("[R] Ultimate (Recommend 15% a 17%)", 17, 15, 30));
             Menu.AddGroupLabel("  ◣  SkinHack ◥");
             var SkinHack = Menu.Add("SkinID", new Slider("SkinHack Select", 3, 0, 6));
             var ID = new[] { "Classic", "SkinHack 1", "SkinHack 2", "SkinHack 3", "SkinHack 4", "SkinHack 5", "SkinHack 6"};
             SkinHack.DisplayName = ID[SkinHack.CurrentValue];
             SkinHack.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = ID[changeArgs.NewValue]; };;
             Menu.AddGroupLabel("  ◣  Draw ◥");
-            //Menu.Add("DesabilitaDraw", new CheckBox("✔  " + NomeChamp + " My Range", true));
             Menu.Add("DesabilitaDrawQ", new CheckBox("✔  " + NomeChamp + " Q Range", true));
             Menu.Add("DesabilitaDrawW", new CheckBox("✔  " + NomeChamp + " W Range", true));
             Menu.Add("DesabilitaDrawE", new CheckBox("✔  " + NomeChamp + " E Range", true));
             Menu.Add("DesabilitaText", new CheckBox("✔  " + NomeChamp + " ShowText Mode", true));
             Menu.Add("DesabilitaEspada", new CheckBox("✔  " + NomeChamp + " Draw [Sword]", true));
+
+      
+            
+                       
             //Menu.Add("DesabilitaDrawLine", new CheckBox("✔  Get Line TargetSelector", true));
         /*    Menu.AddGroupLabel("  ◣  Kappa ◥");
             Menu.Add("ModelLoad", new KeyBind("Fizz Sword - Braziliam Hue", false, KeyBind.BindTypes.HoldActive, 'L'));*/
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
-            //EloBuddy.Hacks.RenderWatermark = false;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Gapcloser.OnGapcloser += Gapcloser_OnGapCloser;
             Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
         }
 
-
-        ////////////////////////////////////////////////////////////////////SKIN////////////////////////////////////////////////////////////////////
         //Skins
         public static void LoadingSkin()
         {
@@ -301,11 +334,11 @@ namespace UnrealSkill_Shen
                         //Efeito 3D
                         Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(101, -58);
                         Text1.Color = Color.Black ;
-                        Text1.TextValue = "[Predition: Detected HP -25%]";
+                        Text1.TextValue = "[Prediction: Detected HP -25%]";
                         Text1.Draw();
                         Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -60);
                         Text1.Color = color;
-                        Text1.TextValue = "[Predition: Detected HP -25%]";
+                        Text1.TextValue = "[Prediction: Detected HP -25%]";
                         Text1.Draw();
                     }
                 }
@@ -389,13 +422,13 @@ namespace UnrealSkill_Shen
                                     var SelectModeShield = Program.Menu["ShieldMode"].DisplayName;
                                     switch (SelectModeShield)
                                     {
-                                        case "[ 2 Use Logic Count Enemy ]":
+                                        case "[ Use Logic Count Enemy ]":
                                             if (Aliados.IsInRange(Objeto, 325f) && Inimigo.IsInRange(Objeto, 325f)) //Objeto.CountAlliesInRange(325f) >= 1 && Objeto.CountEnemiesInRange(325f) >= 1)
                                             {
                                                 W.Cast();
                                             }
                                             break;
-                                        case "[ 1 Use Aways ]":
+                                        case "[ Use Aways ]":
                                             if (Q.IsOnCooldown)
                                             {
                                                 W.Cast();
@@ -412,10 +445,10 @@ namespace UnrealSkill_Shen
                     var SelectModeTaunt = Program.Menu["TauntModes"].DisplayName;
                     switch (SelectModeTaunt)
                     {
-                        case "[ 2 Use Max Range ]":
+                        case "[ Use Max Range ]":
                             if (Inimigo.IsValidTarget(600) && E.IsReady()) E.Cast(Inimigo.Position);
                             break;
-                        case "[ 1 Use Fast ]":
+                        case "[ Use Fast ]":
                             //Orbwalker.OrbwalkTo(Game.CursorPos);
                             if (E.IsReady()) E.Cast(Inimigo.Position);
                             break;
@@ -435,8 +468,44 @@ namespace UnrealSkill_Shen
                     if (Inimigo.IsValidTarget(500) && Randuin.IsReady()) Randuin.Cast();
                 }
         }
+        public static void LaneClear()
+        {
+            if (Menu["QLane"].Cast<CheckBox>().CurrentValue)
+            {
+                foreach (var source in EntityManager.MinionsAndMonsters.EnemyMinions.Where(a => a.IsValid && a.IsValidTarget(250) && !a.IsDead))
+                {
+                    Q.Cast();
+                }
+            }
+        }
+        public static void JungleClear()
+        {
+            if (Menu["QJungle"].Cast<CheckBox>().CurrentValue)
+            {
+                var jg = EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position, 250).FirstOrDefault(e => e.IsValid && !e.IsDead);
+                if (Q.IsReady() && jg.IsValidTarget(250))
+                {
+                    Q.Cast();
+                }
+            }
+        }
+        public static void Execute()
+        {
+            if (true)
+            {
+                var creep = EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.Position, 800).
+                    Where(x => x.BaseSkinName == "SRU_Dragon" || x.BaseSkinName == "SRU_Baron");
+                foreach (var x in creep.Where(y => Player.Instance.Distance(y.Position)
+                        <= Player.Instance.BoundingRadius + 500 + y.BoundingRadius))
+                {
+                    if (x != null && x.Health <= GetSmiteDamage())
+                        Player.Instance.Spellbook.CastSpell(Smite, x);
+                }
+            }
+        }
         private static void Game_OnUpdate(EventArgs args)
         {
+            if (Menu["Smith"].Cast<CheckBox>().CurrentValue) Execute();
          //   if (Player.Instance.CountEnemiesInRange(Q.Range) > 0)
             LoadingSkin();
             Ultimate();
@@ -444,10 +513,12 @@ namespace UnrealSkill_Shen
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
                 Orbwalker.OrbwalkTo(Game.CursorPos);
+               LaneClear();
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
                 Orbwalker.OrbwalkTo(Game.CursorPos);
+                JungleClear();
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
