@@ -19,6 +19,8 @@ namespace UnrealSkill_Shen
 {
     class Program
     {
+        private float lastPing;
+
         public AIHeroClient myTarget = null;
         public static Spell.Active Q;
         public static Spell.Active W;
@@ -29,10 +31,11 @@ namespace UnrealSkill_Shen
         public static  String NomeChamp = "Shen";
         public static AIHeroClient Champion { get { return Player.Instance; } }
         public static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Bold));
-        public static Text Text1 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 13, System.Drawing.FontStyle.Bold));
+        public static Text Text1 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 20, System.Drawing.FontStyle.Bold));
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Game_OnStart;
+            Bootstrap.Init(null);
         }
 
         private static void Game_OnStart(EventArgs args)
@@ -60,43 +63,50 @@ namespace UnrealSkill_Shen
             Chat.Print("||  UnrealSkill ||" + NomeChamp + "  <font color='#15c757'>Carregado / Load</font>", System.Drawing.Color.White);
             //-------------------------------------------------------MENU ------------------------------------------------------------
             Menu = MainMenu.AddMenu("[ Shen ]", "USV");
+            Menu.AddGroupLabel("  ◣  Items ◥");
+            Menu.Add("UseItemAtk", new CheckBox("✔  " + NomeChamp + "  Use Offensive Items", true));
+            Menu.Add("UseItemDef", new CheckBox("✔  " + NomeChamp + "  Use Items Defensive", true));
             Menu.AddGroupLabel("  ◣  Combo ◥");
-            Menu.Add("QCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use Q", true));
-            Menu.Add("WCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use W", true));
-            Menu.Add("ECombo", new CheckBox("✔  " + NomeChamp + " Usar / Use E", true));
-            Menu.Add("RCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use R", true));
+            Menu.Add("QCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use Q [Combo]", true));
+            Menu.AddGroupLabel("  ◣  [W] Modes ◥");
+            Menu.Add("WCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use W [Combo]", true));
+            var ShieldMode = Menu.Add("ShieldMode", new Slider("Cast (W Mode)", 1, 1, 2));
+            var Shield = new[] { NomeChamp, "[ 1 Use Aways ]", "[ 2 Use Logic Count Enemy ]" };
+            ShieldMode.DisplayName = Shield[ShieldMode.CurrentValue];
+            ShieldMode.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = Shield[changeArgs.NewValue]; };
+            
             Menu.AddGroupLabel("  ◣  [E] Modes ◥");
+            Menu.Add("ECombo", new CheckBox("✔  " + NomeChamp + " Usar / Use E [Combo]", true));
             var TauntMode = Menu.Add("TauntModes", new Slider("Cast (E Mode)   ||    1 Use Fast for Range || 2 Use Logic Max Range    ||", 1, 1, 2));
-            var TMode = new[] { NomeChamp, "1 Use Fast", "2 Use Max Range" };
+            var TMode = new[] { NomeChamp, "[ 1 Use Fast ]", "[ 2 Use Max Range ]" };
             TauntMode.DisplayName = TMode[TauntMode.CurrentValue];
             TauntMode.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = TMode[changeArgs.NewValue]; };
             Menu.AddGroupLabel("  ◣  [R] Ultimate ◥");
+            Menu.Add("RCombo", new CheckBox("✔  " + NomeChamp + " Usar / Use R [Config]", true));
             foreach (var allies in EntityManager.Heroes.Allies.Where(i => !i.IsMe))
             { Menu.Add("SalvaAliado" + allies.ChampionName, new CheckBox("Save: " + allies.ChampionName, true));}
             Menu.Add("SaveUlt", new Slider("% HP For R (Recommend 15%) Auto check Enemy within the dangerous range", 15, 0, 100));
+            Menu.AddGroupLabel("  ◣  SkinHack ◥");
+            var SkinHack = Menu.Add("SkinID", new Slider("SkinHack Select", 3, 0, 6));
+            var ID = new[] { "Classic", "SkinHack 1", "SkinHack 2", "SkinHack 3", "SkinHack 4", "SkinHack 5", "SkinHack 6"};
+            SkinHack.DisplayName = ID[SkinHack.CurrentValue];
+            SkinHack.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = ID[changeArgs.NewValue]; };;
             Menu.AddGroupLabel("  ◣  Draw ◥");
-           //Menu.Add("DesabilitaDraw", new CheckBox("✔  " + NomeChamp + " My Range", true));
+            //Menu.Add("DesabilitaDraw", new CheckBox("✔  " + NomeChamp + " My Range", true));
             Menu.Add("DesabilitaDrawQ", new CheckBox("✔  " + NomeChamp + " Q Range", true));
             Menu.Add("DesabilitaDrawW", new CheckBox("✔  " + NomeChamp + " W Range", true));
             Menu.Add("DesabilitaDrawE", new CheckBox("✔  " + NomeChamp + " E Range", true));
             Menu.Add("DesabilitaText", new CheckBox("✔  " + NomeChamp + " ShowText Mode", true));
             Menu.Add("DesabilitaEspada", new CheckBox("✔  " + NomeChamp + " Draw [Sword]", true));
             //Menu.Add("DesabilitaDrawLine", new CheckBox("✔  Get Line TargetSelector", true));
-            Menu.AddGroupLabel("  ◣  Items ◥");
-            Menu.Add("UseItemAtk", new CheckBox("✔  " + NomeChamp + "  Use Offensive Items", true));
-            Menu.Add("UseItemDef", new CheckBox("✔  " + NomeChamp + "  Use Items Defensive", true));
-            Menu.AddGroupLabel("  ◣  SkinHack ◥");
-            var SkinHack = Menu.Add("SkinID", new Slider("SkinHack Select", 3, 0, 6));
-            var ID = new[] { "Classic", "SkinHack 1", "SkinHack 2", "SkinHack 3", "SkinHack 4", "SkinHack 5", "SkinHack 6"};
-            SkinHack.DisplayName = ID[SkinHack.CurrentValue];
-            SkinHack.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = ID[changeArgs.NewValue]; };;
-
         /*    Menu.AddGroupLabel("  ◣  Kappa ◥");
             Menu.Add("ModelLoad", new KeyBind("Fizz Sword - Braziliam Hue", false, KeyBind.BindTypes.HoldActive, 'L'));*/
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
             //EloBuddy.Hacks.RenderWatermark = false;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
+            Gapcloser.OnGapcloser += Gapcloser_OnGapCloser;
+            Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
         }
 
 
@@ -153,7 +163,40 @@ namespace UnrealSkill_Shen
                 }
         }
         }
-
+        private static void DrawHealths()
+        {//Crédit Soresu From LeagueSharp
+            float i = 0;
+            foreach (var hero in EntityManager.Heroes.Allies.Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead))
+            {
+                var playername = hero.Name;
+                if (playername.Length > 13)
+                {
+                    playername = playername.Remove(9) + "...";
+                }
+                var champion = hero.ChampionName;
+                if (champion.Length > 12)
+                {
+                    champion = champion.Remove(7) + "...";
+                }
+                var percent = (int)(hero.Health / hero.MaxHealth * 100);
+                var color = Color.Red;
+                if (percent > 25)
+                {
+                    color = Color.Orange;
+                }
+                if (percent > 50)
+                {
+                    color = Color.Yellow;
+                }
+                if (percent > 75)
+                {
+                    color = Color.LimeGreen;
+                }
+                Drawing.DrawText(Drawing.Width * 0.8f, Drawing.Height * 0.15f + i, color,"[ " + champion + " ]");
+                Drawing.DrawText(Drawing.Width * 0.9f, Drawing.Height * 0.15f + i, color,((int)hero.Health).ToString() + " [" + percent.ToString() + "%]");
+                i += 20f;
+            }
+        }
         private static void Game_OnDraw(EventArgs args)
         {
             var SkinHackSelect = Program.Menu["SkinID"].DisplayName;
@@ -185,35 +228,27 @@ namespace UnrealSkill_Shen
                     color = Color.BlueViolet;
                     break;
             }
-
-            foreach (var allies in EntityManager.Heroes.Allies.Where(i => !i.IsMe && !i.IsDead && i.CountEnemiesInRange(1000) >= 1 && i.HealthPercent <= 10))
+            var DrawText1 = Menu["DesabilitaText"].Cast<CheckBox>().CurrentValue;
+            if (DrawText1)
             {
-                var Aliado = "";
-                if (Aliado == "")
+                foreach (var allies in EntityManager.Heroes.Allies.Where(i => !i.IsMe && !i.IsDead))// && i.CountEnemiesInRange(1000) >= 1 && i.HealthPercent <= 99))
                 {
-                  //  Drawing.DrawText(20, 20, color, "Notification [HP -20%] " + allies.ChampionName, 40);
-                    Drawing.DrawLine(ObjectManager.Player.Position.WorldToScreen(), allies.Position.WorldToScreen(), 5f, Color.Red);
-                }
-               /* if (Aliado != "")
-                {
-                    Aliado = "";
-                    Drawing.DrawText(30, -30, color, "Notification [HP -20%] " + allies.ChampionName, 40);
-                }*/
-            }
+                    DrawHealths();
 
+                }
+            }
 
             var DrawEspada = Menu["DesabilitaEspada"].Cast<CheckBox>().CurrentValue;
             if (DrawEspada)
             {
                 foreach (var Objeto in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValid && !o.IsDead && o.BaseSkinName == "ShenSpirit"))
                 {
-                    Drawing.DrawText(30, 20, color, "Timer: " + DateTime.Now.ToShortTimeString(), 40);
+                    Drawing.DrawText(30, 20, color, "Timer: " + DateTime.Now.ToShortTimeString());
                     Drawing.DrawLine(ObjectManager.Player.Position.WorldToScreen(), Objeto.Position.WorldToScreen(), 5f, color);
-                    Drawing.DrawCircle(Objeto.Position, 100, color);
+                    Drawing.DrawCircle(Objeto.Position, 325f, color);
                     //Drawing.DrawLine(ObjectManager.Player.Position.WorldToScreen(), Objeto.Position.WorldToScreen(), 4f, Color.FromArgb(90, color));
                 }
             }
-
 
             var Inimigo = TargetSelector.GetTarget(1500, DamageType.Physical);
            // var DrawAutoAtk = Menu["DesabilitaDraw"].Cast<CheckBox>().CurrentValue;
@@ -250,12 +285,35 @@ namespace UnrealSkill_Shen
                 Text.Color = Color.White;
                 Text.TextValue = SelectModeTaunt;
                 Text.Draw();
+                var SelectModeShield = Program.Menu["ShieldMode"].DisplayName;
+                Text.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -5);
+                Text.Color = color;
+                Text.TextValue = "[W] Mode: ";
+                Text.Draw();
+                Text.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(40, -5);
+                Text.Color = Color.White;
+                Text.TextValue = SelectModeShield;
+                Text.Draw();
+                foreach (var hero in EntityManager.Heroes.Allies.Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead))
+                {
+                    if (hero.HealthPercent <= 25)
+                    {
+                        //Efeito 3D
+                        Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(101, -58);
+                        Text1.Color = Color.Black ;
+                        Text1.TextValue = "[Predition: Detected HP -25%]";
+                        Text1.Draw();
+                        Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -60);
+                        Text1.Color = color;
+                        Text1.TextValue = "[Predition: Detected HP -25%]";
+                        Text1.Draw();
+                    }
+                }
 
 
             }
             
-        }  
-        
+        }      
         public static void Ultimate()
         {
             if (Menu["RCombo"].Cast<CheckBox>().CurrentValue)
@@ -278,54 +336,96 @@ namespace UnrealSkill_Shen
                 }
             }
         }
-        private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender,Interrupter.InterruptableSpellEventArgs args)
+        private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender,Interrupter.InterruptableSpellEventArgs e)
         {
-            var intTarget = TargetSelector.GetTarget(E.Range, DamageType.Magical);
-            if (E.IsReady() && sender.IsValidTarget(E.Range))
+            if (e.Sender.IsEnemy && Player.Instance.Distance(sender, true) < E.Range)
             {
-                    E.Cast(intTarget.ServerPosition);
+                E.Cast(sender);
             }
+        }
+        private static void Gapcloser_OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
+        {
+            if ( e.Sender.IsEnemy && Player.Instance.Distance(sender, true) < E.Range)
+            {
+              E.Cast(e.Sender);
+              //  Q.Cast();
+              //  W.Cast();
+            }
+        }
+        public static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
+        {
+            if (target.IsValidTarget(Player.Instance.GetAutoAttackRange() + 200) && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)));
+            {
+                if (Menu["UseItemAtk"].Cast<CheckBox>().CurrentValue)
+                {
+                    if (Tiamat.Cast()); //Orbwalker.ResetAutoAttack();
+                    if (TitanicHydra.Cast()); //Orbwalker.ResetAutoAttack();
+                    if (Hydra.Cast()) ; //Orbwalker.ResetAutoAttack();
+                }
+            }
+
+            return;
         }
         public static void Combo()
         {
-            var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);
-         //   if (!Inimigo.IsValid()) return;
-            if (Q.IsReady() && Inimigo.IsValidTarget(300) && (Menu["QCombo"].Cast<CheckBox>().CurrentValue))
-                {
-                   Q.Cast();
-                }
-            //W Logics
+            var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);//Pega Target
             foreach (var Objeto in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValid && !o.IsDead && o.BaseSkinName == "ShenSpirit"))
             {
-                if (Q.IsOnCooldown && W.IsInRange(Inimigo) && Menu["WCombo"].Cast<CheckBox>().CurrentValue)
+                //Q Logics
+                if (Menu["QCombo"].Cast<CheckBox>().CurrentValue)
                 {
-                    W.Cast();
+                    if (Inimigo.IsValidTarget(Player.Instance.GetAutoAttackRange() +200))//Ativação Rápida
+                    {
+                        Q.Cast();
+                    }
                 }
-                else if (Objeto.Distance(Player.Instance) >= 500 && Inimigo.Distance(Player.Instance) <=400)
-                {
-                    W.Cast();
-                }
-            }
+                //W Logics
+                    if (W.IsReady() && Menu["WCombo"].Cast<CheckBox>().CurrentValue)
+                    {
+                        foreach (var Aliados in EntityManager.Heroes.Allies.Where(o => o.IsValid && !o.IsDead && o.CountAlliesInRange(250f) >= 1))
+                            foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(o => o.IsValid && !o.IsDead && o.CountEnemiesInRange(250f) >= 1))
+                            {
+                                {
+                                    var SelectModeShield = Program.Menu["ShieldMode"].DisplayName;
+                                    switch (SelectModeShield)
+                                    {
+                                        case "[ 2 Use Logic Count Enemy ]":
+                                            if (Aliados.IsInRange(Objeto, 325f) && Inimigo.IsInRange(Objeto, 325f)) //Objeto.CountAlliesInRange(325f) >= 1 && Objeto.CountEnemiesInRange(325f) >= 1)
+                                            {
+                                                W.Cast();
+                                            }
+                                            break;
+                                        case "[ 1 Use Aways ]":
+                                            if (Q.IsOnCooldown)
+                                            {
+                                                W.Cast();
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                    }
+                    // else if (Objeto.Distance(Player.Instance) >= 500 && Inimigo.Distance(Player.Instance) <=400)
+                
                 if (Menu["ECombo"].Cast<CheckBox>().CurrentValue)
                 {
                     var SelectModeTaunt = Program.Menu["TauntModes"].DisplayName;
                     switch (SelectModeTaunt)
                     {
-                        case "2 Use Max Range":
-                            if (Inimigo.IsValidTarget(600) && E.IsReady()) E.Cast(Inimigo);
+                        case "[ 2 Use Max Range ]":
+                            if (Inimigo.IsValidTarget(600) && E.IsReady()) E.Cast(Inimigo.Position);
                             break;
-                        case "1 Use Fast":
-                            if (E.IsReady() && E.IsInRange(Inimigo)) E.Cast(Inimigo);
+                        case "[ 1 Use Fast ]":
+                            //Orbwalker.OrbwalkTo(Game.CursorPos);
+                            if (E.IsReady()) E.Cast(Inimigo.Position);
                             break;
                     }
                 }
+            }
 
                 if (Menu["UseItemAtk"].Cast<CheckBox>().CurrentValue)
                 {
-                    if (Inimigo.IsValidTarget(250) && TitanicHydra.IsReady()) TitanicHydra.Cast();
                     if (Inimigo.IsValidTarget(250) && Yumus.IsReady()) Yumus.Cast();
-                    if (Inimigo.IsValidTarget(300) && Tiamat.IsReady())Tiamat.Cast();
-                    if (Inimigo.IsValidTarget(300) && Hydra.IsReady()) Hydra.Cast();
                     if (Inimigo.IsValidTarget(400) && BOTRK.IsReady()) BOTRK.Cast(Inimigo);
                     if (Inimigo.IsValidTarget(550) && Bilgewater.IsReady()) Bilgewater.Cast(Inimigo);
                 }
@@ -335,17 +435,29 @@ namespace UnrealSkill_Shen
                     if (Inimigo.IsValidTarget(500) && Randuin.IsReady()) Randuin.Cast();
                 }
         }
-
         private static void Game_OnUpdate(EventArgs args)
         {
          //   if (Player.Instance.CountEnemiesInRange(Q.Range) > 0)
             LoadingSkin();
             Ultimate();
          //   Kappa();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                Orbwalker.OrbwalkTo(Game.CursorPos);
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+                Orbwalker.OrbwalkTo(Game.CursorPos);
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+            {
+                Orbwalker.OrbwalkTo(Game.CursorPos);
+            }
             var Inimigo = TargetSelector.GetTarget(1000, DamageType.Physical);
             if (!Inimigo.IsValid()) return;
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
+                Orbwalker.OrbwalkTo(Game.CursorPos);
                 Combo();
             }
         }
