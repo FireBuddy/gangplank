@@ -658,8 +658,47 @@ namespace UnrealSkill
                     break;
             }
         }
+        private static void DrawHealths()
+        {//Crédit Soresu From LeagueSharp
+            var DrawTxt = Menu["Draw-Text"].Cast<CheckBox>().CurrentValue;
+            if (DrawTxt)
+            {
+                float i = 0;
+                foreach (var hero in EntityManager.Heroes.Enemies.Where(hero => !hero.IsMe && !hero.IsDead))
+                {
+                    var playername = hero.Name;
+                    if (playername.Length > 13)
+                    {
+                        playername = playername.Remove(9) + "...";
+                    }
+                    var champion = hero.ChampionName;
+                    if (champion.Length > 12)
+                    {
+                        champion = champion.Remove(7) + "...";
+                    }
+                    var percent = (int)(hero.Health / hero.MaxHealth * 100);
+                    var color = Color.Red;
+                    if (percent > 25)
+                    {
+                        color = Color.Orange;
+                    }
+                    if (percent > 50)
+                    {
+                        color = Color.Yellow;
+                    }
+                    if (percent > 75)
+                    {
+                        color = Color.LimeGreen;
+                    }
+                    Drawing.DrawText(Drawing.Width * 0.8f, Drawing.Height * 0.15f + i, color, "[ " + champion + " ]");
+                    Drawing.DrawText(Drawing.Width * 0.9f, Drawing.Height * 0.15f + i, color, ((int)hero.Health).ToString() + " [" + percent.ToString() + "%]");
+                    i += 20f;
+                }
+            }
+        }
         private static void Game_OnDraw2(EventArgs args)
         {
+            DrawHealths();// Hp Bar Enemy
             JungleVida();//Vida JG
             var SkinHackSelect = Menu["SkinHack"].DisplayName;
             Color color;
