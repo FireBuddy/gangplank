@@ -19,14 +19,14 @@ namespace EloBuddy
 {
     class Dravvenn
     {
-        public static Menu Menu;
-        public static AIHeroClient Hero = ObjectManager.Player;
-        public static String NomeHeroi = Hero.ChampionName;
-        public static Spell.Active Q, W;
-        public static Spell.Skillshot E, R;
-        public static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 15, System.Drawing.FontStyle.Bold));
+        private static Menu Menu;
+        private static AIHeroClient Hero = ObjectManager.Player;
+        private static String NomeHeroi = Hero.ChampionName;
+        private static Spell.Active Q, W;
+        private static Spell.Skillshot E, R;
+        private static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 15, System.Drawing.FontStyle.Bold));
         static Item BOTRK, Bilgewater, Yumus, Mercurial, Bandana;   
-        public static int PassiveCount// Total Crédit PassiveCount - Darakath
+        private static int PassiveCount// Total Crédit PassiveCount - Darakath
         {
             get
             {
@@ -44,7 +44,7 @@ namespace EloBuddy
             Loading.OnLoadingComplete += Spell;
             Loading.OnLoadingComplete += Menus;
         }
-        public static void Spell(EventArgs args)
+        private static void Spell(EventArgs args)
         {
             Q = new Spell.Active(SpellSlot.Q);
             W = new Spell.Active(SpellSlot.W);
@@ -58,7 +58,7 @@ namespace EloBuddy
             Bandana = new Item(3140);
         }
 
-        public static void Menus(EventArgs args)
+        private static void Menus(EventArgs args)
         {
             if (Hero.ChampionName != "Draven") return;
             Menu = MainMenu.AddMenu(NomeHeroi, NomeHeroi);
@@ -67,9 +67,12 @@ namespace EloBuddy
             Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
             Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using Skill [E]", 1, "Mode [Aggressive]", "Mode [Secure]"));
             Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method", 0, "Mode [Always]", "Mode [Combo]", "Never"));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("If You have Problems With the (Challenge Mode) Use (Normal Mode)");
+            Menu.AddLabel("and Set Down Delay. ''Ping 1 to 60'' Use Delay 200 or 250");
             Menu.Add("ModeAxe", new ComboBox("✔ Select Player Mode - This is OP    ★ ★ ★ ★ ★", 0, "Mode [Challenger] Axes", "Mode [Normal] Axes"));
             Menu.Add("DelayAX", new Slider("Delay Pick Axes Only (Mode [Normal] Axes) ", 250, 0, 500));
-            Menu.AddLabel("Recommend Min 150 Max 250 Delay");
+            Menu.AddLabel("Recommend Min 150 Max 250 Delay & Set in ''Core > Ticks Per Second: 40''");
             Menu.AddLabel("______________________________________________________________________________________"); 
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Combo");
             Menu.Add("Q", new CheckBox("✖   " + NomeHeroi + " - [ Q ]", true));
@@ -98,58 +101,38 @@ namespace EloBuddy
             Gapcloser.OnGapcloser += AntiGapcloserOnOnEnemyGapcloser;
             Interrupter.OnInterruptableSpell += Interrupter2OnOnInterruptableTarget;
 
-            Chat.Print("|| Draaaaaaaven!!! Load || Credit: <font color='#FF0000'>UnrealSkill99</font></b> || Challenger Addon To EB Draaaaaaaven!!!", Color.White);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.1 ||", Color.White);
 
         }
-        public static void UpdateGame(EventArgs args)
+        private static void UpdateGame(EventArgs args)
         {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                Farm();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-            {
-                Jungle();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                var Inimigo = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                if(Inimigo != null) Combo();
-            }
-            PegarMachados();
-            KS();
-            SempreAtivo();
+            var Inimigo = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+            try{
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) Farm(); 
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Jungle(); 
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) if (Inimigo != null) Combo(); 
+            PegarMachados(); KS(); SempreAtivo(); }
+            catch (Exception Eror) { }
         }
-        public static void SempreAtivo()
+        private static void SempreAtivo()
         {
-            if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow))
-            {
-                W.Cast();
-            }
+            if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow)) Core.DelayAction(()=> W.Cast(), 200);
         }
-        public static void Jungle()
+        private static void Jungle()
         {
-            if (Menu["QJungle"].Cast<CheckBox>().CurrentValue)
+            foreach (var Jungle in EntityManager.MinionsAndMonsters.GetJungleMonsters(Hero.Position, Hero.GetAutoAttackRange()))
             {
-                var jg = EntityManager.MinionsAndMonsters.GetJungleMonsters(Hero.Position, Hero.GetAutoAttackRange()).FirstOrDefault(e => e.IsValid && !e.IsDead);
-                if (Q.IsReady() && jg != null)
-                {
-                    if (PassiveCount < 1) { Q.Cast(); }
-                }
+                if (Menu["QJungle"].Cast<CheckBox>().CurrentValue) if (Jungle != null && Hero.Position.Distance(Jungle.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount < 1 && Q.IsReady()) Q.Cast();
+            }   
+        }
+        private static void Farm()
+        {
+            foreach (var Minions in ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy && a.Distance(Hero.Position) <= Hero.GetAutoAttackRange()))
+            {
+                if (Menu["FF"].Cast<CheckBox>().CurrentValue) if (Minions != null && Hero.Position.Distance(Minions.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount < 1 && Q.IsReady()) Q.Cast();
             }
         }
-        public static void Farm()
-        {
-            if (Menu["FF"].Cast<CheckBox>().CurrentValue)
-            {
-                foreach (var source in EntityManager.MinionsAndMonsters.EnemyMinions.Where(a => a.IsValid && a.IsValidTarget(Q.Range) && !a.IsDead))
-                {
-                    if (PassiveCount < 1) { Q.Cast(); }
-                }
-            }
-
-        }
-        public static void Combo()
+        private static void Combo()
         {
             var Inimigo = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             var useQ = Menu["Q"].Cast<CheckBox>().CurrentValue;
@@ -157,34 +140,17 @@ namespace EloBuddy
             var useE = Menu["E"].Cast<CheckBox>().CurrentValue;
             var EMode = Menu["ModeE"].Cast<ComboBox>().CurrentValue;
 
-            if (PassiveCount < 1 && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange() + 100 ){ Q.Cast(); }
-            if (useW && W.IsReady() && !Player.HasBuff("dravenfurybuff")) { W.Cast(); }
-            if (useE && E.IsReady() && Inimigo.IsValidTarget(E.Range))
-            {
-                if (EMode == 0)
-                { E.Cast(Inimigo.Position); }
-                else if (EMode == 1 && Inimigo.IsValidTarget(500))
-                {  E.Cast(Inimigo.Position); }
-            }
+            if (PassiveCount < 1 && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange() + 100 ) Q.Cast(); 
+            if (useW && W.IsReady() && !Player.HasBuff("dravenfurybuff"))  W.Cast(); 
+            if (useE && E.IsReady() && Inimigo.IsValidTarget(E.Range)) if (EMode == 0) E.Cast(Inimigo.Position); else if (EMode == 1 && Inimigo.IsValidTarget(500)) E.Cast(Inimigo.Position); 
+            
             if (Menu["IT"].Cast<CheckBox>().CurrentValue)
             {
                 if (Inimigo.IsValidTarget(250) && Yumus.IsReady()) Core.DelayAction(()=> Yumus.Cast(), 200);
                 if (Inimigo.IsValidTarget(400) && BOTRK.IsReady()) Core.DelayAction(() => BOTRK.Cast(Inimigo), 200);
                 if (Inimigo.IsValidTarget(550) && Bilgewater.IsReady()) Core.DelayAction(() => Bilgewater.Cast(Inimigo), 200);
                 //QSS
-                if (Hero.HasBuffOfType(BuffType.Stun)
-                 || Hero.HasBuffOfType(BuffType.Fear)
-                 || Hero.HasBuffOfType(BuffType.Charm)
-                 || Hero.HasBuffOfType(BuffType.Taunt)
-                 || Hero.HasBuffOfType(BuffType.Blind))
-                //|| Hero.HasBuffOfType(BuffType.Silence)
-                //|| Hero.HasBuffOfType(BuffType.Snare)
-                //|| Hero.HasBuffOfType(BuffType.Suppression)
-                //|| Hero.HasBuffOfType(BuffType.Sleep)
-                //|| Hero.HasBuffOfType(BuffType.Polymorph)
-                //|| Hero.HasBuffOfType(BuffType.Frenzy)
-                //|| Hero.HasBuffOfType(BuffType.Disarm)
-                //|| Hero.HasBuffOfType(BuffType.NearSight)
+                if (Hero.HasBuffOfType(BuffType.Stun)|| Hero.HasBuffOfType(BuffType.Fear)|| Hero.HasBuffOfType(BuffType.Charm) || Hero.HasBuffOfType(BuffType.Taunt) || Hero.HasBuffOfType(BuffType.Blind))
                 {
                     if (Mercurial.IsReady()) Core.DelayAction(() => Mercurial.Cast(), 200);
                     if (Bandana.IsReady()) Core.DelayAction(() => Bandana.Cast(), 200);
@@ -192,12 +158,12 @@ namespace EloBuddy
             }
 
         }
-        public static void PegarMachados()
+        private static void PegarMachados()
         {
             var PegarMachado = Menu["AxeGet"].Cast<ComboBox>().CurrentValue;
             var ModoDesafiante = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
             var DelayAxe = Menu["DelayAX"].Cast<Slider>().CurrentValue;
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead))
+            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead).OrderBy(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy")))
             {
                 if (ModoDesafiante == 1)
                 {
@@ -209,7 +175,6 @@ namespace EloBuddy
                             if (AXE.Position.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
                                 Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                //Orbwalker.OrbwalkTo(AXE.Position);
                                 Orbwalker.DisableMovement = true;
                                 Orbwalker.DisableMovement = false;
                             }
@@ -218,7 +183,6 @@ namespace EloBuddy
                             if (AXE.Position.Distance(Hero.Position) > 110)
                             {
                                 Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                               // Orbwalker.OrbwalkTo(AXE.Position);
                                 Orbwalker.DisableMovement = true;
                                 Orbwalker.DisableMovement = false;
                             }
@@ -250,41 +214,22 @@ namespace EloBuddy
                 }
             }
         }
-        private static float GetSpellDamage(Obj_AI_Base target, SpellSlot slot)
+        private static void KS()
         {
-            var level = Player.GetSpell(slot).Level - 1;
-            switch (slot)
-            {
-                case SpellSlot.E:
-                    {
-                        var damage = new float[] { 70, 105, 140, 175, 210 }[level] + (float)(0.5 * Player.Instance.FlatPhysicalDamageMod);
-                        return Damage.CalculateDamageOnUnit(Player.Instance, target, DamageType.Physical, damage);
-                    }
-                case SpellSlot.R:
-                    {
-                        var damage = new float[] { 175, 275, 375 }[level] + (float)(1.1 * Player.Instance.FlatPhysicalDamageMod);
-                        return Damage.CalculateDamageOnUnit(Player.Instance, target, DamageType.Physical, damage);
-                    }
-            }
-
-            return 0;
-        }
-        public static void KS()
-        {
-            var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
-            if (KS)
-            {
-                foreach (var enemy in EntityManager.Heroes.Enemies.Where(enemy => !enemy.IsDead && enemy.IsHPBarRendered == true && enemy.Health <= GetSpellDamage(enemy, SpellSlot.R) && enemy.Distance(Hero.Position) > Hero.GetAutoAttackRange()))
+                var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
+                if (KS)
                 {
-                        R.Cast(R.GetPrediction(enemy).CastPosition); 
+                    foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered == true && x.Health *2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) *2 && x.Distance(Hero.Position) > Hero.GetAutoAttackRange()))
+                    {
+                        R.Cast(Inimigos.ServerPosition);
+                    }
+                    foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health <= Player.Instance.GetSpellDamage(x, SpellSlot.E)))
+                    {
+                        E.Cast(Inimigos.Position);
+                    }
                 }
-                foreach (var enemy in EntityManager.Heroes.Enemies.Where(enemy => !enemy.IsDead && enemy.Health <= GetSpellDamage(enemy, SpellSlot.E)))
-                {
-                        E.Cast(E.GetPrediction(enemy).CastPosition);                  
-                }
-            }
         }
-        public static void Draw(EventArgs args)
+        private static void Draw(EventArgs args)
         {
             var SkinHackSelect = Menu["SkinHack"].Cast<ComboBox>().CurrentValue;
             Color color;
@@ -302,49 +247,52 @@ namespace EloBuddy
 
             var DrawE = Menu["DE"].Cast<CheckBox>().CurrentValue;
             var DrawAX = Menu["DAX"].Cast<CheckBox>().CurrentValue;
-            if (DrawE) Drawing.DrawCircle(Hero.Position, E.Range, color);
-            if (DrawAX) Drawing.DrawCircle(Hero.Position, Hero.GetAutoAttackRange(), color);
+            if (DrawE) new Circle() { Color = color, BorderWidth = 2f, Radius = E.Range }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = 1050 - 2 }.Draw(Hero.Position);
+            if (DrawAX) new Circle() { Color = color, BorderWidth = 2f, Radius = Hero.GetAutoAttackRange() }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = Hero.GetAutoAttackRange() -2 }.Draw(Hero.Position);
 
             foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead))
             {
                 if (DrawAX)
                 {
-                    Drawing.DrawCircle(AXE.Position, 140, color);
-                    Drawing.DrawLine(Hero.Position.WorldToScreen(), AXE.Position.WorldToScreen(), 5f, Color.FromArgb(90, color));
+                    new Circle() { Color = color, BorderWidth = 3f, Radius = 140 }.Draw(AXE.Position);
+                    new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = 137 }.Draw(AXE.Position);
+                    Drawing.DrawLine(Hero.Position.WorldToScreen(), AXE.Position.WorldToScreen(), 5f, Color.FromArgb(80, color));
                 }
             }
             var DrawKill = Menu["DK"].Cast<CheckBox>().CurrentValue;
-            foreach (var enemy in EntityManager.Heroes.Enemies.Where(enemy => !enemy.IsDead && enemy.IsHPBarRendered == true && enemy.Health <= GetSpellDamage(enemy, SpellSlot.R)))
+            foreach (var Inimigo in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered == true && x.Health *2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) *2))
             {
                 if (DrawKill)
                 {
-                    Text.Position = Drawing.WorldToScreen(enemy.Position) - new Vector2(0, -60);
+                    Text.Position = Drawing.WorldToScreen(Inimigo.Position) - new Vector2(0, -60);
                     Text.Color = Color.White;
-                    Drawing.DrawCircle(enemy.Position, 130, Color.White);
+                    new Circle() { Color = Color.White, BorderWidth = 2f, Radius = 130 }.Draw(Inimigo.Position);
+                    new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = 128 }.Draw(Inimigo.Position);
                     Text.TextValue = "◯ Kill";
                     Text.Draw();
                 }
             }   
 
             }
-        private static  void AntiGapcloserOnOnEnemyGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
+        private static void AntiGapcloserOnOnEnemyGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs gapcloser)
         {
             var UseEInterrupt = Menu["EI"].Cast<CheckBox>().CurrentValue;
-            if (UseEInterrupt)
+            if (!UseEInterrupt || !sender.IsValidTarget()) return;
+            if (ObjectManager.Player.Distance(gapcloser.Sender, true) <
+                E.Range * E.Range && sender.IsValidTarget())
+            {
+                E.Cast(gapcloser.Sender);
+            }
+        }
+        private static void Interrupter2OnOnInterruptableTarget(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+        {
+            var UseEGapcloser = Menu["EG"].Cast<CheckBox>().CurrentValue;
+            if (!UseEGapcloser || !sender.IsValidTarget()) return;
+
+            if (ObjectManager.Player.Distance(sender, true) < E.Range * E.Range)
             {
                 E.Cast(sender);
             }
-            return;
         }
-        private static void Interrupter2OnOnInterruptableTarget(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
-        {
-            var UseEGapcloser = Menu["EG"].Cast<CheckBox>().CurrentValue;
-            if (e.DangerLevel == DangerLevel.High && sender.IsValidTarget(E.Range) && UseEGapcloser)
-            {
-                if (E.IsReady() && E.IsInRange(sender)) E.Cast();
-            }
-            return;
-        }
-
     }
 }
