@@ -50,7 +50,11 @@ namespace EloBuddy
             Q = new Spell.Active(SpellSlot.Q);
             W = new Spell.Active(SpellSlot.W);
             E = new Spell.Skillshot(SpellSlot.E, 1050, SkillShotType.Linear, 250, 1400, 130);
+            E.AllowedCollisionCount = 0;
+            E.MinimumHitChance = HitChance.High;
             R = new Spell.Skillshot(SpellSlot.R, 3000, SkillShotType.Linear);
+            R.AllowedCollisionCount = 0;
+            R.MinimumHitChance = HitChance.High;
 
             BOTRK = new Item(3153, 550);
             Bilgewater = new Item(3144, 550);
@@ -239,7 +243,6 @@ namespace EloBuddy
                                 var Go = 0;
                                 if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
                                 if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                Chat.Print(Go.ToString());
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
 
@@ -250,7 +253,6 @@ namespace EloBuddy
                                 var Go = 0;
                                 if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
                                 if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                Chat.Print(Go.ToString());
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
 
@@ -266,8 +268,8 @@ namespace EloBuddy
             var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
                 if (KS)
                 {
-                   foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => x.IsValid && Hero.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health && x.Distance(Hero.Position) <= 3000))
-                    {
+                foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health <= Player.Instance.GetSpellDamage(x, SpellSlot.R) && x.IsValidTarget(3000)))
+                {
                     if (Inimigos != null) R.Cast(Inimigos.Position);
                     }
                     foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health <= Player.Instance.GetSpellDamage(x, SpellSlot.E)))
