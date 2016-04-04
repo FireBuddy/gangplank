@@ -25,7 +25,9 @@ namespace EloBuddy
         public static Obj_AI_Base Ini;
         private static Spell.Active Q, W;
         private static Spell.Skillshot E, R;
+        public static Text Text1 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 20, System.Drawing.FontStyle.Bold));
         private static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 15, System.Drawing.FontStyle.Bold));
+        private static Text Text0 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Bold));
         static Item BOTRK, Bilgewater, Yumus, Mercurial, Bandana;   
         private static int PassiveCount// Total Crédit PassiveCount - Darakath
         {
@@ -71,27 +73,30 @@ namespace EloBuddy
             Menu.AddLabel("Creator: UnrealSkill-VIP");
 
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
-            Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using [E] (Recommecd Secure)", 1, "Mode [Aggressive]", "Mode [Secure]"));
-            Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method (Recommecd Aways)", 0, "Mode [Always]", "Mode [Combo]", "Never"));
-            Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddGroupLabel("〈〈〈〈 Explaining Modes 〉〉〉〉");
-            Menu.AddLabel("✔ Information - If You have Problems With the (Challenge Mode) Use (Normal Mode)");
-            Menu.AddLabel("and Set Down Delay. ' Ping 1 to 60 ' Use Delay 200 or 250");
+            Menu.AddLabel("✔ Information - If You have Problems With the (Challenge Mode) or (C# Developer Mode)");
+            Menu.AddLabel(" Use (Normal Mode), and Set Down Delay. ' Ping 1 to 120 ' Use Delay 100 or 350");
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.AddLabel("★★☆☆☆ (Normal Mode) - It is More Humanized and you can");
+            Menu.AddLabel("★★☆☆☆ [Normal Mode] - It is More Humanized and you can");
             Menu.AddLabel("configure the Catch Axes time. Posibilitando if the player is a high ping also");
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.AddLabel("★★★☆☆ (Challenger Mode) - Try to focus on not losing Axe No Way");
+            Menu.AddLabel("★★★☆☆ [Challenger Mode] - Try to focus on not losing Axe No Way");
             Menu.AddLabel("70% probability of not losing the ax combo, but can not be configured delay");
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.AddLabel("★★★★★ (C# Developer Mode) - Unbelievable Mechanica 2-3 Axes");
+            Menu.AddLabel("★★★★★ [C# Developer Mode] - Unbelievable Mechanica 2-3 Axes");
             Menu.AddLabel("(You Need This Item With ' Ghost Dancer ' and Speed Boot for 3 Axes) ");
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.Add("ModeAxe", new ComboBox("✔ Select Player Mode - This is OP  ★★★★★", 0, "1 - Mode [Challenger]", "2 - Mode [Normal]", "3 - Mode [C# Developer]"));
-            Menu.Add("DelayAX", new Slider("Delay Pick Axes Only ''2 - Mode [Normal]'' ", 250, 0, 500));
-            Menu.AddLabel("Recommend Min 150 Max 250 Delay & Set in ''Core > Ticks Per Second: 40''");
-            Menu.AddLabel("______________________________________________________________________________________"); 
+            Menu.Add("ModeAxe", new ComboBox("〈〈〈〈  Select Player Mode  〉〉〉〉Always Test Other Modes",0, "1 - [Challenger Mode]", "2 - [Normal Mode]", "3 - [C# Developer Mode]"));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.Add("DelayAX", new Slider("Delay Pick Axes Only - (Normal Mode)", 250, 0, 500));
+            Menu.AddLabel("Config in Core > Ticks Per Second: 20 a 25 '");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
+            Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using [E] (Recommecd Secure)", 1, "Mode [Aggressive]", "Mode [Safe]", "Mode [GapCloser]"));
+            Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method (Recommecd Aways)", 0, "Mode [Always]", "Mode [Combo]", "Never"));
+            Menu.Add("AT", new CheckBox("✖   " + NomeHeroi + " - Catch [ Axe ] In Tower Enemy", false));
+            Menu.Add("CR", new Slider("Catch Axes Distance (Recommend 270) ", 370, 250, 400));
+            Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Combo");
             Menu.Add("Q", new CheckBox("✖   " + NomeHeroi + " - [ Q ]", true));
             Menu.Add("W", new CheckBox("✖   " + NomeHeroi + " - [ W ] ", true));
@@ -106,10 +111,15 @@ namespace EloBuddy
             Menu.Add("DAX", new CheckBox("✖   " + NomeHeroi + " - [ Axe ] Radius", true));
             Menu.Add("DE", new CheckBox("✖   " + NomeHeroi + " - [ E ] Range",  true));
             Menu.Add("DK", new CheckBox("✖   " + NomeHeroi + " - [ Text ] Kill", true));
+            Menu.Add("DM", new CheckBox("✖   " + NomeHeroi + " - [ Text ] Modes", true));
+            Menu.Add("DCR", new CheckBox("✖   " + NomeHeroi + " - [ Radius ] Catch Axe", true));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Misc");
+            Menu.AddLabel("Important: For Him Not Spending ability to Allies Clear them in");
+            Menu.AddLabel("Menu EB > Core > GapCloser = Clear its Allies are Marked");
             Menu.Add("EG", new CheckBox("✖   " + NomeHeroi + " - [ E ] Ant-Gapcloser", true));
             Menu.Add("EI", new CheckBox("✖   " + NomeHeroi + " - [ E ] Interrupt", true));
+
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  KillSteal & Item");
             Menu.Add("KS", new CheckBox("✖   " + NomeHeroi + " - [ E & R ] KS", true));
             Menu.Add("IT", new CheckBox("✖   " + NomeHeroi + " - [ Items ] Use", true));
@@ -119,9 +129,13 @@ namespace EloBuddy
             Gapcloser.OnGapcloser += AntiGapcloserOnOnEnemyGapcloser;
             Interrupter.OnInterruptableSpell += Interrupter2OnOnInterruptableTarget;
 
-            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.DeepPink);
-            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.WhiteSmoke);
-            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.DeepSkyBlue);
+            var version = "1.3";
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " || ", Color.DeepPink);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.WhiteSmoke);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.DeepSkyBlue);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.DeepPink);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.WhiteSmoke);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.DeepSkyBlue);
 
         }
         private static void UpdateGame(EventArgs args)
@@ -142,14 +156,14 @@ namespace EloBuddy
         {
             foreach (var Jungle in EntityManager.MinionsAndMonsters.GetJungleMonsters(Hero.Position, Hero.GetAutoAttackRange()))
             {
-                if (Menu["QJungle"].Cast<CheckBox>().CurrentValue) if (Jungle != null && Hero.Position.Distance(Jungle.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount < 1 && Q.IsReady()) Q.Cast();
+                if (Menu["QJungle"].Cast<CheckBox>().CurrentValue) if (Jungle != null && Hero.Position.Distance(Jungle.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount <= 1 && Q.IsReady()) Q.Cast();
             }   
         }
         private static void Farm()
         {
             foreach (var Minions in ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy && a.Distance(Hero.Position) <= Hero.GetAutoAttackRange()))
             {
-                if (Menu["FF"].Cast<CheckBox>().CurrentValue) if (Minions != null && Hero.Position.Distance(Minions.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount < 1 && Q.IsReady()) Q.Cast();
+                if (Menu["FF"].Cast<CheckBox>().CurrentValue) if (Minions != null && Hero.Position.Distance(Minions.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount <= 1 && Q.IsReady()) Q.Cast();
             }
         }
         private static void Combo()
@@ -158,17 +172,23 @@ namespace EloBuddy
             var useQ = Menu["Q"].Cast<CheckBox>().CurrentValue;
             var useW = Menu["W"].Cast<CheckBox>().CurrentValue;
             var useE = Menu["E"].Cast<CheckBox>().CurrentValue;
+            var useR = Menu["R"].Cast<CheckBox>().CurrentValue;
             var EMode = Menu["ModeE"].Cast<ComboBox>().CurrentValue;
 
             if (PassiveCount < 1 && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange() + 100 ) Q.Cast(); 
             if (useW && W.IsReady() && !Player.HasBuff("dravenfurybuff"))  W.Cast(); 
-            if (useE && E.IsReady() && Inimigo.IsValidTarget(E.Range)) if (EMode == 0) E.Cast(Inimigo.Position); else if (EMode == 1 && Inimigo.IsValidTarget(500)) E.Cast(Inimigo.Position); 
-            
+            if (useE && E.IsReady() && Inimigo.IsValidTarget(E.Range)) if (EMode == 0) E.Cast(Inimigo.Position); else if (EMode == 1 && Inimigo.IsValidTarget(500)) E.Cast(Inimigo.Position);
+
+            /*foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.HealthPercent  <= 60 && x.IsValidTarget(Hero.GetAutoAttackRange() + 200)))
+            {
+             //   if (Inimigos != null && useR && R.IsReady()) R.Cast(Inimigos.Position);
+            }*/
+
             if (Menu["IT"].Cast<CheckBox>().CurrentValue)
             {
-                if (Inimigo.IsValidTarget(250) && Yumus.IsReady()) Core.DelayAction(()=> Yumus.Cast(), 200);
-                if (Inimigo.IsValidTarget(400) && BOTRK.IsReady()) Core.DelayAction(() => BOTRK.Cast(Inimigo), 200);
-                if (Inimigo.IsValidTarget(550) && Bilgewater.IsReady()) Core.DelayAction(() => Bilgewater.Cast(Inimigo), 200);
+                if (Inimigo.IsValidTarget(Hero.GetAutoAttackRange()) && Yumus.IsReady()) Core.DelayAction(()=> Yumus.Cast(), 200);
+                if (Inimigo.IsValidTarget(Hero.GetAutoAttackRange()) && BOTRK.IsReady()) Core.DelayAction(() => BOTRK.Cast(Inimigo), 200);
+                if (Inimigo.IsValidTarget(Hero.GetAutoAttackRange()) && Bilgewater.IsReady()) Core.DelayAction(() => Bilgewater.Cast(Inimigo), 200);
                 //QSS
                 if (Hero.HasBuffOfType(BuffType.Stun)|| Hero.HasBuffOfType(BuffType.Fear)|| Hero.HasBuffOfType(BuffType.Charm) || Hero.HasBuffOfType(BuffType.Taunt) || Hero.HasBuffOfType(BuffType.Blind))
                 {
@@ -178,12 +198,18 @@ namespace EloBuddy
             }
 
         }
+        public static bool IsUnderTurret(Vector3 position)
+        {
+            return ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(980) && turret.IsEnemy);
+        }
         private static void PegarMachados()
         {
             var PegarMachado = Menu["AxeGet"].Cast<ComboBox>().CurrentValue;
             var ModoDesafiante = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
             var DelayAxe = Menu["DelayAX"].Cast<Slider>().CurrentValue;
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead).OrderBy(x => x.Position.Distance(Hero.ServerPosition)))
+            var RadiusCatch = Menu["CR"].Cast<Slider>().CurrentValue;
+            var PegaMachadoNaTorreInimiga = Menu["AT"].Cast<CheckBox>().CurrentValue;
+            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && x.Distance(Hero.Position) <= RadiusCatch).OrderBy(x => x.Position.Distance(Hero.ServerPosition)))
             {
                 if (ModoDesafiante == 1)//Normal
                 {
@@ -194,17 +220,44 @@ namespace EloBuddy
                         case 1: 
                             if (AXE.Position.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                Orbwalker.DisableMovement = true;
-                                Orbwalker.DisableMovement = false;
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                 Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                 Orbwalker.DisableMovement = true;
+                                 Orbwalker.DisableMovement = false; 
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+                                    else
+                                    {
+                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                        Orbwalker.DisableMovement = true;
+                                        Orbwalker.DisableMovement = false;
+                                    }
+                                }
                             }
                             break;
                         case 0:
                             if (AXE.Position.Distance(Hero.Position) > 110)
                             {
-                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                Orbwalker.DisableMovement = true;
-                                Orbwalker.DisableMovement = false;
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                    Orbwalker.DisableMovement = true;
+                                    Orbwalker.DisableMovement = false;
+
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+                                    else
+                                    {
+                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                        Orbwalker.DisableMovement = true;
+                                        Orbwalker.DisableMovement = false;
+                                    }
+                                }
                             }
                             break;
                         case 3:
@@ -219,13 +272,37 @@ namespace EloBuddy
                         case 1:
                             if (AXE.Distance(Hero.Position) > 100 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+
+                                    else
+                                    {
+                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                    }
+                                }
                             }
                             break;
                         case 0:
                             if (AXE.Distance(Hero.Position) > 100)
                             {
-                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+                                    else
+                                    {
+                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                    }
+                                }
                             }
                             break;
                         case 2:
@@ -240,9 +317,22 @@ namespace EloBuddy
                         case 1:
                             if (AXE.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                var Go = 0;
-                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                    var Go = 0;
+                                    if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                    if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+                                    else
+                                    {
+                                        var Go = 0;
+                                        if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                        if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                    }
+                                }
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
 
@@ -250,9 +340,22 @@ namespace EloBuddy
                         case 0:
                             if (AXE.Distance(Hero.Position) > 110)
                             {
-                                var Go = 0;
-                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                if (PegaMachadoNaTorreInimiga)
+                                {
+                                    var Go = 0;
+                                    if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                    if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                }
+                                else 
+                                {
+                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+                                    else
+                                    {
+                                        var Go = 0;
+                                        if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                        if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                    }
+                                }
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
 
@@ -268,7 +371,7 @@ namespace EloBuddy
             var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
                 if (KS)
                 {
-                foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health <= Player.Instance.GetSpellDamage(x, SpellSlot.R) && x.IsValidTarget(3000)))
+                foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health * 2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) * 2 && x.IsValidTarget(3000)))
                 {
                     if (Inimigos != null) R.Cast(Inimigos.Position);
                     }
@@ -280,6 +383,7 @@ namespace EloBuddy
         }
         private static void Draw(EventArgs args)
         {
+            if (Hero.IsDead) return;
             var SkinHackSelect = Menu["SkinHack"].Cast<ComboBox>().CurrentValue;
             Color color;
             switch (SkinHackSelect)
@@ -296,10 +400,17 @@ namespace EloBuddy
 
             var DrawE = Menu["DE"].Cast<CheckBox>().CurrentValue;
             var DrawAX = Menu["DAX"].Cast<CheckBox>().CurrentValue;
-            if (DrawE) new Circle() { Color = color, BorderWidth = 2f, Radius = E.Range }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = 1050 - 2 }.Draw(Hero.Position);
-            if (DrawAX) new Circle() { Color = color, BorderWidth = 2f, Radius = Hero.GetAutoAttackRange() }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = Hero.GetAutoAttackRange() -2 }.Draw(Hero.Position);
+            if (DrawE) { new Circle() { Color = color, BorderWidth = 1f, Radius = E.Range }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = 1050 - 3 }.Draw(Hero.Position); }
+            if (DrawAX) { new Circle() { Color = color, BorderWidth = 1f, Radius = Hero.GetAutoAttackRange() }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = Hero.GetAutoAttackRange() - 3 }.Draw(Hero.Position); }
 
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead))
+            var DrawRC = Menu["DCR"].Cast<CheckBox>().CurrentValue;
+            var DrawRCA = Menu["CR"].Cast<Slider>().CurrentValue;
+            if (DrawAX && DrawRC)
+            {
+                new Circle() { Color = color, BorderWidth = 1f, Radius = DrawRCA }.Draw(Hero.Position);
+                new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = DrawRCA -3 }.Draw(Hero.Position);
+            }
+                foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead))
             {
                 if (DrawAX)
                 {
@@ -308,35 +419,134 @@ namespace EloBuddy
                     Drawing.DrawLine(Hero.Position.WorldToScreen(), AXE.Position.WorldToScreen(), 5f, Color.FromArgb(80, color));
                 }
             }
-            var DrawKill = Menu["DK"].Cast<CheckBox>().CurrentValue;
-            foreach (var Inimigo in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered == true && x.Health *2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) *2))
-            {
-                if (DrawKill)
-                {
-                    Text.Position = Drawing.WorldToScreen(Inimigo.Position) - new Vector2(0, -60);
-                    Text.Color = Color.White;
-                    new Circle() { Color = Color.White, BorderWidth = 2f, Radius = 130 }.Draw(Inimigo.Position);
-                    new Circle() { Color = Color.Black, BorderWidth = 2f, Radius = 128 }.Draw(Inimigo.Position);
-                    Text.TextValue = "◯ Kill";
-                    Text.Draw();
-                }
-            }   
 
+
+            if (true)
+            {
+                var ModoDePegaMachados = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
+                var ModoDeUsaE = Menu["ModeE"].Cast<ComboBox>().CurrentValue;
+                string AxeModo = "";
+                switch (ModoDePegaMachados)
+                {
+                    case 0: AxeModo = "[Challenger Mode]"; break;
+                    case 1: AxeModo = "[Normal Mode]"; break;
+                    case 2: AxeModo = "[C# Developer Mode]";break;
+                    default: break;
+                }
+                string EModo = "";
+                switch (ModoDeUsaE)
+                {
+                    case 0: EModo = "[Aggressive]"; break;
+                    case 1: EModo = "[Safe]"; break;
+                    case 2: EModo = "[GapCloser]"; break;
+                    default: break;
+                }
+                var DrawTM = Menu["DM"].Cast<CheckBox>().CurrentValue;
+                if (DrawTM)
+                {
+                    Text0.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -40);
+                    Text0.Color = color;
+                    Text0.TextValue = "[Axe] Mode: ";
+                    Text0.Draw();
+                    Text0.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(30, -40);
+                    Text0.Color = Color.White;
+                    Text0.TextValue = AxeModo;
+                    Text0.Draw();
+
+                    Text0.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -20);
+                    Text0.Color = color;
+                    Text0.TextValue = "[E] Mode: ";
+                    Text0.Draw();
+                    Text0.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(40, -20);
+                    Text0.Color = Color.White;
+                    Text0.TextValue = EModo;
+                    Text0.Draw();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    foreach (var hero in EntityManager.Heroes.Enemies.Where(hero => hero.IsValidTarget(1500)))
+                    {
+                        if (R.IsReady())
+                        {
+                            //credit GinjiBan prediction
+                            var collision = new List<AIHeroClient>();
+                            var startPos = Player.Instance.Position.To2D();
+                            var endPos = hero.Position.To2D();
+                            collision.Clear();
+                            foreach (var colliHero in EntityManager.Heroes.Enemies.Where(colliHero => !colliHero.IsDead && colliHero.IsVisible && colliHero.IsInRange(hero, 5000) && colliHero.IsValidTarget(5000)))
+                            {
+                                if (Prediction.Position.Collision.LinearMissileCollision(colliHero, startPos, endPos, R.Speed, R.Width, R.CastDelay))
+                                {
+                                    collision.Add(colliHero);
+                                }
+                                if (collision.Count >= 2)
+                                {
+                                    //Efeito 3D
+                                    Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(101, -58);
+                                    Text1.Color = Color.Black;
+                                    Text1.TextValue = "[Prediction [R] Hit +" + collision.Count.ToString() + " Available]";
+                                    Text1.Draw();
+                                    Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -60);
+                                    Text1.Color = color;
+                                    Text1.TextValue = "[Prediction [R] Hit +" + collision.Count.ToString() + " Available]";
+                                    Text1.Draw();
+                                    Player.Instance.Spellbook.CastSpell(SpellSlot.R, colliHero.Position);
+                                }
+                            }
+                        }
+                    }
+                }
+
+              /*  foreach (var hero in EntityManager.Heroes.Enemies.Where(hero => !hero.IsDead && Hero.Position.CountEnemiesInRange(Hero.GetAutoAttackRange() + 100) >= 1))
+                {
+                    if (hero.HealthPercent <= 60)
+                    {
+                        //Efeito 3D
+                        Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(101, -58);
+                        Text1.Color = Color.Black;
+                        Text1.TextValue = "[Prediction Ult Hit + 2 Available]";
+                        Text1.Draw();
+                        Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -60);
+                        Text1.Color = color;
+                        Text1.TextValue = "[Prediction Ult Hit + 2 Available]";
+                        Text1.Draw();
+                    }
+                }*/
+
+                var DrawKill = Menu["DK"].Cast<CheckBox>().CurrentValue;
+                foreach (var Inimigo in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered == true && x.Health * 2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) * 2))
+                {
+                    if (DrawKill)
+                    {
+                        Text.Position = Drawing.WorldToScreen(Inimigo.Position) - new Vector2(0, -60);
+                        Text.Color = Color.White;
+                        new Circle() { Color = Color.White, BorderWidth = 1f, Radius = 130 }.Draw(Inimigo.Position);
+                        new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = 127 }.Draw(Inimigo.Position);
+                        Text.TextValue = "✖ Kill ✖";
+                        Text.Draw();
+                    }
+                }
             }
+
+
+        }
         private static void AntiGapcloserOnOnEnemyGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs gapcloser)
         {
+            var EMode = Menu["ModeE"].Cast<ComboBox>().CurrentValue;
             var UseEInterrupt = Menu["EI"].Cast<CheckBox>().CurrentValue;
-            if (!UseEInterrupt || !sender.IsValidTarget() && !sender.IsEnemy) return;
-            if (Hero.Distance(gapcloser.Sender) <= E.Range && sender.IsValidTarget())
-            {
-                E.Cast(gapcloser.Sender);
+            if (!sender.IsValidTarget()) return;
+            if (EMode == 2 || UseEInterrupt) {
+                if (Hero.Distance(gapcloser.Sender) <= E.Range && sender.IsEnemy)
+                {
+                    E.Cast(gapcloser.Sender);
+                }
             }
         }
         private static void Interrupter2OnOnInterruptableTarget(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
             var UseEGapcloser = Menu["EG"].Cast<CheckBox>().CurrentValue;
-            if (!UseEGapcloser || !sender.IsValidTarget() && !sender.IsEnemy) return;
-            if (Hero.Distance(sender) <= E.Range)
+            if (!UseEGapcloser || !sender.IsValidTarget()) return;
+            if (Hero.Distance(sender) <= E.Range && sender.IsEnemy)
             {
                 E.Cast(sender);
             }
