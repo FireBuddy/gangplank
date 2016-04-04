@@ -22,6 +22,7 @@ namespace EloBuddy
         private static Menu Menu;
         private static AIHeroClient Hero = ObjectManager.Player;
         private static String NomeHeroi = Hero.ChampionName;
+        public static Obj_AI_Base Ini;
         private static Spell.Active Q, W;
         private static Spell.Skillshot E, R;
         private static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 15, System.Drawing.FontStyle.Bold));
@@ -63,15 +64,28 @@ namespace EloBuddy
             if (Hero.ChampionName != "Draven") return;
             Menu = MainMenu.AddMenu(NomeHeroi, NomeHeroi);
             Menu.AddSeparator(1);
+            Menu.AddLabel("Creator: UnrealSkill-VIP");
+
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
-            Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using Skill [E]", 1, "Mode [Aggressive]", "Mode [Secure]"));
-            Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method", 0, "Mode [Always]", "Mode [Combo]", "Never"));
+            Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using [E] (Recommecd Secure)", 1, "Mode [Aggressive]", "Mode [Secure]"));
+            Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method (Recommecd Aways)", 0, "Mode [Always]", "Mode [Combo]", "Never"));
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.AddLabel("If You have Problems With the (Challenge Mode) Use (Normal Mode)");
-            Menu.AddLabel("and Set Down Delay. ''Ping 1 to 60'' Use Delay 200 or 250");
-            Menu.Add("ModeAxe", new ComboBox("✔ Select Player Mode - This is OP    ★ ★ ★ ★ ★", 0, "Mode [Challenger] Axes", "Mode [Normal] Axes"));
-            Menu.Add("DelayAX", new Slider("Delay Pick Axes Only (Mode [Normal] Axes) ", 250, 0, 500));
+            Menu.AddGroupLabel("〈〈〈〈 Explaining Modes 〉〉〉〉");
+            Menu.AddLabel("✔ Information - If You have Problems With the (Challenge Mode) Use (Normal Mode)");
+            Menu.AddLabel("and Set Down Delay. ' Ping 1 to 60 ' Use Delay 200 or 250");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("★★☆☆☆ (Normal Mode) - It is More Humanized and you can");
+            Menu.AddLabel("configure the Catch Axes time. Posibilitando if the player is a high ping also");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("★★★☆☆ (Challenger Mode) - Try to focus on not losing Axe No Way");
+            Menu.AddLabel("70% probability of not losing the ax combo, but can not be configured delay");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("★★★★★ (C# Developer Mode) - Unbelievable Mechanica 2-3 Axes");
+            Menu.AddLabel("(You Need This Item With ' Ghost Dancer ' and Speed Boot for 3 Axes) ");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.Add("ModeAxe", new ComboBox("✔ Select Player Mode - This is OP  ★★★★★", 0, "1 - Mode [Challenger]", "2 - Mode [Normal]", "3 - Mode [C# Developer]"));
+            Menu.Add("DelayAX", new Slider("Delay Pick Axes Only ''2 - Mode [Normal]'' ", 250, 0, 500));
             Menu.AddLabel("Recommend Min 150 Max 250 Delay & Set in ''Core > Ticks Per Second: 40''");
             Menu.AddLabel("______________________________________________________________________________________"); 
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Combo");
@@ -101,7 +115,9 @@ namespace EloBuddy
             Gapcloser.OnGapcloser += AntiGapcloserOnOnEnemyGapcloser;
             Interrupter.OnInterruptableSpell += Interrupter2OnOnInterruptableTarget;
 
-            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.1 ||", Color.White);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.DeepPink);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.WhiteSmoke);
+            Chat.Print("|| Draven 2016 || UnrealSkill99|| 1.2 ||", Color.DeepSkyBlue);
 
         }
         private static void UpdateGame(EventArgs args)
@@ -111,12 +127,12 @@ namespace EloBuddy
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) Farm(); 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Jungle(); 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) if (Inimigo != null) Combo(); 
-            PegarMachados(); KS(); SempreAtivo(); }
+            PegarMachados(); KS(); SempreAtivo(Ini); }
             catch (Exception Eror) { }
         }
-        private static void SempreAtivo()
+        private static void SempreAtivo(Obj_AI_Base Inimigo)
         {
-            if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow)) Core.DelayAction(()=> W.Cast(), 200);
+            if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow) && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange()) Core.DelayAction(()=> W.Cast(), 200);
         }
         private static void Jungle()
         {
@@ -163,9 +179,9 @@ namespace EloBuddy
             var PegarMachado = Menu["AxeGet"].Cast<ComboBox>().CurrentValue;
             var ModoDesafiante = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
             var DelayAxe = Menu["DelayAX"].Cast<Slider>().CurrentValue;
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead).OrderBy(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy")))
+            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead).OrderBy(x => x.Position.Distance(Hero.ServerPosition)))
             {
-                if (ModoDesafiante == 1)
+                if (ModoDesafiante == 1)//Normal
                 {
                     Orbwalker.DisableMovement = false;
                     switch (PegarMachado)
@@ -191,7 +207,7 @@ namespace EloBuddy
                             break;
                     }
                 }
-               else
+                else if (ModoDesafiante == 0)//Challenger
                 {
                     switch (PegarMachado)
                     {
@@ -212,16 +228,47 @@ namespace EloBuddy
                             break;
                     }
                 }
+                else if (ModoDesafiante == 2)//Dev
+                {
+                    switch (PegarMachado)
+                    {
+                        default: break;
+                        case 1:
+                            if (AXE.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                            {
+                                var Go = 0;
+                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                Chat.Print(Go.ToString());
+                            }
+                            else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
+
+                            break;
+                        case 0:
+                            if (AXE.Distance(Hero.Position) > 110)
+                            {
+                                var Go = 0;
+                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
+                                Chat.Print(Go.ToString());
+                            }
+                            else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
+
+                            break;
+                        case 2:
+                            break;
+                    }
+                }
             }
         }
         private static void KS()
         {
-                var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
+            var KS = Menu["KS"].Cast<CheckBox>().CurrentValue;
                 if (KS)
                 {
-                    foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered == true && x.Health *2 <= Player.Instance.GetSpellDamage(x, SpellSlot.R) *2 && x.Distance(Hero.Position) > Hero.GetAutoAttackRange()))
+                   foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => x.IsValid && Hero.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health && x.Distance(Hero.Position) <= 3000))
                     {
-                        R.Cast(Inimigos.ServerPosition);
+                    if (Inimigos != null) R.Cast(Inimigos.Position);
                     }
                     foreach (var Inimigos in EntityManager.Heroes.Enemies.Where(x => !x.IsDead && x.Health <= Player.Instance.GetSpellDamage(x, SpellSlot.E)))
                     {
@@ -277,9 +324,8 @@ namespace EloBuddy
         private static void AntiGapcloserOnOnEnemyGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs gapcloser)
         {
             var UseEInterrupt = Menu["EI"].Cast<CheckBox>().CurrentValue;
-            if (!UseEInterrupt || !sender.IsValidTarget()) return;
-            if (ObjectManager.Player.Distance(gapcloser.Sender, true) <
-                E.Range * E.Range && sender.IsValidTarget())
+            if (!UseEInterrupt || !sender.IsValidTarget() && !sender.IsEnemy) return;
+            if (Hero.Distance(gapcloser.Sender) <= E.Range && sender.IsValidTarget())
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -287,9 +333,8 @@ namespace EloBuddy
         private static void Interrupter2OnOnInterruptableTarget(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
             var UseEGapcloser = Menu["EG"].Cast<CheckBox>().CurrentValue;
-            if (!UseEGapcloser || !sender.IsValidTarget()) return;
-
-            if (ObjectManager.Player.Distance(sender, true) < E.Range * E.Range)
+            if (!UseEGapcloser || !sender.IsValidTarget() && !sender.IsEnemy) return;
+            if (Hero.Distance(sender) <= E.Range)
             {
                 E.Cast(sender);
             }
