@@ -29,7 +29,6 @@ namespace EloBuddy
 
         private static void Loading_OnLoadingComplete(EventArgs args)
         {
-            //Chat.Print(Player.Instance.ChampionName);
             switch (Player.Instance.ChampionName)
             {
                 case "Gangplank":
