@@ -143,7 +143,7 @@ namespace EloBuddy
             var Inimigo = TargetSelector.GetTarget(E.Range, DamageType.Physical);
             try{
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) Farm(); 
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Jungle(); 
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Farm(); //Jungle(); 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) if (Inimigo != null) Combo(); 
             PegarMachados(); KS(); SempreAtivo(Ini); }
             catch (Exception Eror) { }
@@ -152,18 +152,18 @@ namespace EloBuddy
         {
             if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow) && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange()) Core.DelayAction(()=> W.Cast(), 200);
         }
-        private static void Jungle()
+      /*  private static void Jungle()
         {
             foreach (var Jungle in EntityManager.MinionsAndMonsters.GetJungleMonsters(Hero.Position, Hero.GetAutoAttackRange()))
             {
-                if (Menu["QJungle"].Cast<CheckBox>().CurrentValue) if (Jungle != null && Hero.Position.Distance(Jungle.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount <= 1 && Q.IsReady()) Q.Cast();
+                if (Menu["FJ"].Cast<CheckBox>().CurrentValue) if (Jungle != null && Hero.Position.Distance(Jungle.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount == 0 && Q.IsReady()) Q.Cast();
             }   
-        }
+        }*/
         private static void Farm()
         {
             foreach (var Minions in ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy && a.Distance(Hero.Position) <= Hero.GetAutoAttackRange()))
             {
-                if (Menu["FF"].Cast<CheckBox>().CurrentValue) if (Minions != null && Hero.Position.Distance(Minions.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount <= 1 && Q.IsReady()) Q.Cast();
+                if (Menu["FF"].Cast<CheckBox>().CurrentValue) if (Minions != null && Hero.Position.Distance(Minions.Position) <= Hero.GetAutoAttackRange()) if (PassiveCount == 0 && Q.IsReady()) Q.Cast();
             }
         }
         private static void Combo()
@@ -198,18 +198,13 @@ namespace EloBuddy
             }
 
         }
-        public static bool IsUnderTurret(Vector3 position)
-        {
-            return ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(980) && turret.IsEnemy);
-        }
         private static void PegarMachados()
         {
             var PegarMachado = Menu["AxeGet"].Cast<ComboBox>().CurrentValue;
             var ModoDesafiante = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
             var DelayAxe = Menu["DelayAX"].Cast<Slider>().CurrentValue;
             var RadiusCatch = Menu["CR"].Cast<Slider>().CurrentValue;
-            var PegaMachadoNaTorreInimiga = Menu["AT"].Cast<CheckBox>().CurrentValue;
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && x.Distance(Hero.Position) <= RadiusCatch).OrderBy(x => x.Position.Distance(Hero.ServerPosition)))
+            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && !EntityManager.Turrets.Enemies.Any(t=> t.IsValidTarget(1100)) && x.Distance(Hero.Position) <= RadiusCatch).OrderBy(x => Game.CursorPos.Distance(x.Position) <= 550))//.OrderBy(x => x.Position.Distance(Hero.Position)))
             {
                 if (ModoDesafiante == 1)//Normal
                 {
@@ -220,44 +215,17 @@ namespace EloBuddy
                         case 1: 
                             if (AXE.Position.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                 Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                 Orbwalker.DisableMovement = true;
-                                 Orbwalker.DisableMovement = false; 
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-                                    else
-                                    {
-                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                        Orbwalker.DisableMovement = true;
-                                        Orbwalker.DisableMovement = false;
-                                    }
-                                }
+                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                Orbwalker.DisableMovement = true;
+                                Orbwalker.DisableMovement = false;
                             }
                             break;
                         case 0:
                             if (AXE.Position.Distance(Hero.Position) > 110)
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                    Orbwalker.DisableMovement = true;
-                                    Orbwalker.DisableMovement = false;
-
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-                                    else
-                                    {
-                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
-                                        Orbwalker.DisableMovement = true;
-                                        Orbwalker.DisableMovement = false;
-                                    }
-                                }
+                                Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
+                                Orbwalker.DisableMovement = true;
+                                Orbwalker.DisableMovement = false;
                             }
                             break;
                         case 3:
@@ -272,37 +240,19 @@ namespace EloBuddy
                         case 1:
                             if (AXE.Distance(Hero.Position) > 100 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-
-                                    else
-                                    {
-                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
-                                    }
-                                }
+                                //Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                var Go = 0;
+                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 150); Go = 1;
+                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 50);
                             }
                             break;
                         case 0:
                             if (AXE.Distance(Hero.Position) > 100)
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                    Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
-
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-                                    else
-                                    {
-                                        Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
-                                    }
-                                }
+                                //Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
+                                var Go = 0;
+                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 150); Go = 1;
+                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 50);
                             }
                             break;
                         case 2:
@@ -311,54 +261,28 @@ namespace EloBuddy
                 }
                 else if (ModoDesafiante == 2)//Dev
                 {
+                    var Torre = EntityManager.Turrets.Enemies.Where(a => !a.IsDead && ObjectManager.Player.Distance(a) <= 1000);
+                    var tor = EntityManager.Turrets.Enemies.Any(a => !a.IsDead && ObjectManager.Player.Distance(a) <= 1000);
                     switch (PegarMachado)
                     {
                         default: break;
                         case 1:
                             if (AXE.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                    var Go = 0;
-                                    if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                    if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-                                    else
-                                    {
-                                        var Go = 0;
-                                        if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                        if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                    }
-                                }
+                                var Go = 0;
+                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
-
                             break;
                         case 0:
                             if (AXE.Distance(Hero.Position) > 110)
                             {
-                                if (PegaMachadoNaTorreInimiga)
-                                {
-                                    var Go = 0;
-                                    if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                    if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                }
-                                else 
-                                {
-                                    if (IsUnderTurret(AXE.Position) && IsUnderTurret(Hero.Position)) { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-                                    else
-                                    {
-                                        var Go = 0;
-                                        if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
-                                        if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
-                                    }
-                                }
+                               var Go = 0;
+                               if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
+                               if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
                             }
                             else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
-
                             break;
                         case 2:
                             break;
