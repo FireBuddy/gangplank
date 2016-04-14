@@ -175,7 +175,7 @@ namespace UnrealSkill
                         {
                             if (hero.Health <= Player.Instance.GetSpellDamage(hero, SpellSlot.Q))
                             {
-                                Chat.Print("Auto KillSteal [Q] " + hero.ChampionName, Color.White);
+                                //Chat.Print("Auto KillSteal [Q] " + hero.ChampionName, Color.White);
                                 Q.Cast(hero);
                             }
                         }
@@ -184,13 +184,11 @@ namespace UnrealSkill
                             var vec = hero.ServerPosition / ObjectManager.Player.Position;
                             var Logica = R.GetPrediction(hero).CastPosition + Vector3.Normalize(vec) * 100;
                             Player.Instance.Spellbook.CastSpell(SpellSlot.R, Logica);
-                            Chat.Print("Auto KillSteal [R] " + hero.ChampionName,Color.White);
+                            //Chat.Print("Auto KillSteal [R] " + hero.ChampionName,Color.White);
                         }
 
                     }
                 }
-                //Auto Atira em Barril Com Inimigo
-                var AE = Menu["AE"].Cast<CheckBox>().CurrentValue;
 
                 // Usar R Em Team Figth
                 var UsaR = Menu["R"].Cast<CheckBox>().CurrentValue;
@@ -211,33 +209,22 @@ namespace UnrealSkill
         {
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                Combo();
-            }
-            else
-            {
                 // Usa Q em Barril
-                var UsaW = Menu["AE"].Cast<CheckBox>().CurrentValue;
-                var Explodir = ObjectManager.Get<Obj_AI_Base>().Where(o => o.BaseSkinName == "GangplankBarrel" && o.Distance(Player.Instance) <= Q.Range + 100 && o.Health == 1 && o.CountEnemiesInRange(350) >= 1).FirstOrDefault();
+                var Explodir = ObjectManager.Get<Obj_AI_Base>().Where(o => o.BaseSkinName == "GangplankBarrel" && o.Distance(Player.Instance) <= Q.Range && o.Health == 1 && o.CountEnemiesInRange(350) >= 1).FirstOrDefault();
                 if (Explodir != null)
                 {
                     Q.Cast(Explodir);
                 }
+                else
+                {
+                    Combo();
+                }
             }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                Clear();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
-            {
-                Lasthit();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-            {
-                Jungle();
-            }
-
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) Clear();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))Lasthit();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))Jungle();
             SempreAtivado();// Sempre Ativado
-            if (Menu["US"].Cast<CheckBox>().CurrentValue) LoadingSkin();// UsaSkinHack
+            LoadingSkin();// UsaSkinHack
         }
         public static void Lasthit()
         {
@@ -316,13 +303,10 @@ namespace UnrealSkill
                 if (AtkBarrel != null && AtkBarrel.Health >= 2)
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, AtkBarrel);//Auto estaka Barrel Atacando
-                    return;
+                    //return;
                 }
             }
-            if (Player.Instance.HealthPercent <= UsaW2 && UsaW && Player.Instance.CountEnemiesInRange(800) >= 1)
-            {
-                W.Cast();
-            }
+            if (Player.Instance.HealthPercent <= UsaW2 && UsaW && Player.Instance.CountEnemiesInRange(800) >= 1) W.Cast();
             var NaoUsaQ = false;
             var barrels = Barrils().Where(o =>o.IsValid && !o.IsDead && o.Distance(Player.Instance) < 1600 && o.BaseSkinName == "GangplankBarrel").ToList();
 
@@ -359,14 +343,7 @@ namespace UnrealSkill
                     }
                 }
             }
-           /* var meleeRangeBarrel = barrels.FirstOrDefault(b =>(b.Health < 2 || (b.Health == 2 && !KillableBarrel(b, true) && Q.IsReady() && !justQ)) && KillableBarrel(b, true) && b.Distance(player) < Player.Instance.GetAutoAttackRange(b));
-            var secondb = barrels.Where(b => b.Distance(meleeRangeBarrel) < BarrelConnectionRange && EntityManager.Heroes.Enemies.Count(o => o.IsValidTarget() && o.Distance(b) < BarrelExplosionRange &&
-            b.Distance(Prediction.Position.PredictUnitPosition(o, 500)) < BarrelExplosionRange) > 0);
-            if (meleeRangeBarrel != null && ((EntityManager.Heroes.Enemies.Count(o =>o.IsValidTarget() && o.Distance(meleeRangeBarrel) < BarrelExplosionRange && meleeRangeBarrel.Distance(Prediction.Position.PredictUnitPosition(o, 500)) < BarrelExplosionRange) > 0) || secondb != null) && !Q.IsReady() && !justQ && Player.Instance.CanAttack)
-            {
-                Player.IssueOrder(GameObjectOrder.AttackUnit, meleeRangeBarrel);
-            //    Chat.Print("Atk Barril");      
-            }*/
+
             if (true)
             {
                 if (barrels.Any() && Q.IsReady())
@@ -378,10 +355,7 @@ namespace UnrealSkill
                         {
                             foreach (var detoneateTargetBarrel in detoneateTargetBarrels)
                             {
-                                if (!KillableBarrel(detoneateTargetBarrel))
-                                {
-                                    continue;
-                                }
+                                if (!KillableBarrel(detoneateTargetBarrel)) continue;
                                 if (detoneateTargetBarrel.Distance(target) < BarrelExplosionRange && target.Distance(detoneateTargetBarrel.Position) < BarrelExplosionRange)
                                 {
                                     NaoUsaQ = true;
@@ -404,7 +378,7 @@ namespace UnrealSkill
                             }
                         }
                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        if (AOEExtendido > 1)// 1 a 5 - padrao 2 - Blow up enemies with E
+                        if (AOEExtendido > 0)// 1 a 5 - padrao 2 - Blow up enemies with E
                         {
                             var enemies = EntityManager.Heroes.Enemies.Where(e => e.IsValidTarget() && e.Distance(Player.Instance) < 1050 && e.IsHPBarRendered == true); //normal 600
                             if (detoneateTargetBarrels.Any())
@@ -478,10 +452,7 @@ namespace UnrealSkill
         }
         private static void CastQonHero(Obj_AI_Base target, List<Obj_AI_Minion> barrels)
         {
-            if (barrels.FirstOrDefault(b => target.Distance(b.Position) <= BarrelExplosionRange) != null && target.Health > Player.Instance.GetSpellDamage(target, SpellSlot.Q))
-            {
-                return;
-            }
+            if (barrels.FirstOrDefault(b => target.Distance(b.Position) <= BarrelExplosionRange) != null) return;// && target.Health > Player.Instance.GetSpellDamage(target, SpellSlot.Q)) return;
             Q.Cast(target);
         }
         private static void CastE(Obj_AI_Base target, List<Obj_AI_Minion> barrels)
@@ -540,7 +511,7 @@ namespace UnrealSkill
                     if (!justE)
                     {
                         justE = true;
-                        Core.DelayAction(() => justE = false, 500);
+                        Core.DelayAction(() => justE = false, 200);
                     }
                 }
             }
@@ -561,7 +532,7 @@ namespace UnrealSkill
                 }
             }
         }
-        private static  IEnumerable<Vector3> GetBarrelPoints(Vector3 point)
+        private static IEnumerable<Vector3> GetBarrelPoints(Vector3 point)
         {
             return PointsAroundTheTarget(point, BarrelConnectionRange, 20f).Where(p => p.Distance(point) >= BarrelExplosionRange);
         }
@@ -603,59 +574,33 @@ namespace UnrealSkill
                 var SkinHackSelect = Menu["SkinHack"].DisplayName;
                 switch (SkinHackSelect)
                 {
-                    case "Classic Gangplank":
-                        Objeto.SetSkinId(0);
-                        break;
-                    case "Spooky Gangplank":
-                        Objeto.SetSkinId(1);
-                        break;
-                    case "Minuteman Gangplank":
-                        Objeto.SetSkinId(2);
-                        break;
-                    case "Sailor Gangplank":
-                        Objeto.SetSkinId(3);
-                        break;
-                    case "Toy Soldier Gangplank":
-                        Objeto.SetSkinId(4);
-                        break;
-                    case "Special Forces Gangplank":
-                        Objeto.SetSkinId(5);
-                        break;
-                    case "Sultan Gangplank":
-                        Objeto.SetSkinId(6);
-                        break;
-                    case "Captain Gangplank":
-                        Objeto.SetSkinId(7);
-                        break;
+                    case "Classic Gangplank": Objeto.SetSkinId(0);  break;
+                    case "Spooky Gangplank":Objeto.SetSkinId(1);  break;
+                    case "Minuteman Gangplank": Objeto.SetSkinId(2);   break;
+                    case "Sailor Gangplank":  Objeto.SetSkinId(3);   break;
+                    case "Toy Soldier Gangplank":Objeto.SetSkinId(4);  break;
+                    case "Special Forces Gangplank": Objeto.SetSkinId(5); break;
+                    case "Sultan Gangplank": Objeto.SetSkinId(6);break;
+                    case "Captain Gangplank": Objeto.SetSkinId(7); break;
                 }
             }
-            var SkinHackSelect1 = Menu["SkinHack"].DisplayName;
-            switch (SkinHackSelect1)
+            if (Menu["UseSkinHack"].Cast<CheckBox>().CurrentValue)
             {
-                case "Classic Gangplank":
-                    Player.Instance.SetSkinId(0);
-                    break;
-                case "Spooky Gangplank":
-                    Player.Instance.SetSkinId(1);
-                    break;
-                case "Minuteman Gangplank":
-                    Player.Instance.SetSkinId(2);
-                    break;
-                case "Sailor Gangplank":
-                    Player.Instance.SetSkinId(3);
-                    break;
-                case "Toy Soldier Gangplank":
-                    Player.Instance.SetSkinId(4);
-                    break;
-                case "Special Forces Gangplank":
-                    Player.Instance.SetSkinId(5);
-                    break;
-                case "Sultan Gangplank":
-                    Player.Instance.SetSkinId(6);
-                    break;
-                case "Captain Gangplank":
-                    Player.Instance.SetSkinId(7);
-                    break;
+                if (Menu.Get<KeyBind>("SkinLoad").CurrentValue)
+                {
+                    var SkinHackSelect1 = Menu["SkinHack"].DisplayName;
+                    switch (SkinHackSelect1)
+                    {
+                        case "Classic Gangplank": Player.Instance.SetSkinId(0);  break;
+                        case "Spooky Gangplank": Player.Instance.SetSkinId(1); break;
+                        case "Minuteman Gangplank": Player.Instance.SetSkinId(2); break;
+                        case "Sailor Gangplank": Player.Instance.SetSkinId(3);  break;
+                        case "Toy Soldier Gangplank": Player.Instance.SetSkinId(4); break;
+                        case "Special Forces Gangplank":  Player.Instance.SetSkinId(5); break;
+                        case "Sultan Gangplank":Player.Instance.SetSkinId(6); break;
+                        case "Captain Gangplank": Player.Instance.SetSkinId(7); break;
+                    }
+                }
             }
         }
         private static void DrawHealths()
@@ -704,33 +649,15 @@ namespace UnrealSkill
             Color color;
             switch (SkinHackSelect)
             {
-                default:
-                    color = Color.Transparent;
-                    break;
-                case "Classic Gangplank":
-                    color = Color.MediumVioletRed;
-                    break;
-                case "Spooky Gangplank":
-                    color = Color.DeepSkyBlue;
-                    break;
-                case "Minuteman Gangplank":
-                    color = Color.MediumBlue;
-                    break;
-                case "Sailor Gangplank":
-                    color = Color.WhiteSmoke;
-                    break;
-                case "Toy Soldier Gangplank":
-                    color = Color.DarkRed;
-                    break;
-                case "Special Forces Gangplank":
-                    color = Color.MediumSeaGreen;
-                    break;
-                case "Sultan Gangplank":
-                    color = Color.BlueViolet;
-                    break;
-                case "Captain Gangplank":
-                    color = Color.Maroon;
-                    break;
+                default: color = Color.Transparent;  break;
+                case "Classic Gangplank": color = Color.MediumVioletRed; break;
+                case "Spooky Gangplank": color = Color.DeepSkyBlue; break;
+                case "Minuteman Gangplank": color = Color.MediumBlue; break;
+                case "Sailor Gangplank":color = Color.WhiteSmoke; break;
+                case "Toy Soldier Gangplank": color = Color.DarkRed; break;
+                case "Special Forces Gangplank": color = Color.MediumSeaGreen; break;
+                case "Sultan Gangplank": color = Color.BlueViolet;  break;
+                case "Captain Gangplank": color = Color.Maroon; break;
             }
             var DrawQ = Menu["Draw-Q"].Cast<CheckBox>().CurrentValue;
             var DrawE = Menu["Draw-E"].Cast<CheckBox>().CurrentValue;
@@ -787,7 +714,7 @@ namespace UnrealSkill
                     }
                 }
             }
-            if (false)//config.Item("drawWcd", true).GetValue<bool>())
+            if (false)
             {
                 foreach (var barrelData in savedBarrels)
                 {
@@ -808,53 +735,52 @@ namespace UnrealSkill
         public static void InitMenu(EventArgs args)
         {
             Menu = MainMenu.AddMenu(NomeHeroi, NomeHeroi);
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + " Enemy ◥");
-            Menu.Add("Q", new CheckBox("✖   " + NomeHeroi + " [Q] - Enemy", true));
-            Menu.Add("W", new CheckBox("✖   " + NomeHeroi + " [W] - Auto CC", true));
-            Menu.Add("E", new CheckBox("✖   " + NomeHeroi + " [E] - Logics", true));
-            Menu.Add("R", new CheckBox("✖   " + NomeHeroi + " [R] - Team Figth", true));
-            Menu.Add("R2", new CheckBox("✖   " + NomeHeroi +" [R] [Q] - Auto KillSteal", true));
-
-            Menu.Add("W2", new CheckBox("✖   " + NomeHeroi + " [W] - Config", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Combo 〉〉〉〉");
+            Menu.Add("Q", new CheckBox("❐   " + NomeHeroi + " [Q] - Enemy", true));
+            Menu.Add("W", new CheckBox("❐   " + NomeHeroi + " [W] - Auto CC", true));
+            Menu.Add("E", new CheckBox("❐   " + NomeHeroi + " [E] - Logics", true));
+            Menu.Add("R", new CheckBox("❐   " + NomeHeroi + " [R] - Team Figth", true));
+            Menu.Add("R2", new CheckBox("❐   " + NomeHeroi +" [R] [Q] - Auto KillSteal", true));
+            Menu.AddGroupLabel("Recommend [E] - Logics & [R] - Team Figth OFF");
+            Menu.AddGroupLabel("Place the barrel Manual and use the combo to");
+            Menu.AddGroupLabel("automatically complete the placement of the next");
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.Add("W2", new CheckBox("❐   " + NomeHeroi + " [W] - Config", true));
             var WHP = Menu.Add("WPerc", new Slider("% HP To Use W", 60, 10, 80));
-
-            Menu.AddGroupLabel("  ◣  " + NomeHeroi + " Barrel Extended Mechanics ◥");
-            Menu.Add("E2", new CheckBox("✖   " + NomeHeroi + " [E] - Barrel Extended", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Barrel Extended Mechanics 〉〉〉〉");
+            Menu.Add("E2", new CheckBox("❐   " + NomeHeroi + " [E] - Barrel Extended", true));
             var Modes = new[] { "☑ 1 Profissional", "☑ 2 Advanced" };
             var BarrelMode = Menu.Add("SS", new ComboBox("Select The Mode Of [Extended Barrel] Recommend [Pro]", Modes));
             BarrelMode.DisplayName = Modes[BarrelMode.CurrentValue];
             BarrelMode.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs) { sender.DisplayName = Modes[changeArgs.NewValue]; }; ;
-
+            Menu.AddGroupLabel("Recommend Barrel Mode [ ☑ 2 Advanced ]");
             var AOE1 = Menu.Add("AOE3", new Slider("AOE Barrel Extended [Recommend 2]", 2, 1, 5));
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + " Automatic ◥");
-            Menu.Add("AE", new CheckBox("✖   " + NomeHeroi + " [Q] Auto Explosion Barrel", true));
-            Menu.AddLabel("You can Log Barrel manually, it automatically detects Enemies Within and Shoots Auto");
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + " Farm ◥");
-            Menu.Add("AQ", new CheckBox("✖   " + NomeHeroi + " [Q] Auto KillSteal Jungle", true));
-            Menu.Add("QJ", new CheckBox("✖   " + NomeHeroi + " [Q] Jungle", true));
-            Menu.Add("QL", new CheckBox("✖   " + NomeHeroi + " [Q] LastHit", true));
-            Menu.Add("EF", new CheckBox("✖   " + NomeHeroi + " [E] Farm", true));
-            Menu.Add("QF", new CheckBox("✖   " + NomeHeroi + " [Q] Barrel Farm", true));
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + " Draw 1 ◥");
-            Menu.Add("Draw-Q", new CheckBox("✖   " + NomeHeroi + " [Q] - Range", true));
-            Menu.Add("Draw-E", new CheckBox("✖   " + NomeHeroi + " [E] - Range", true));
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + " Draw 2 ◥");
-            Menu.Add("Draw-Text", new CheckBox("✖   " + NomeHeroi + " [HP] - Track Enemies", true));
-            Menu.Add("Draw-JGHP", new CheckBox("✖   " + NomeHeroi + " [HP] - Track Jungle", true));
-
-            Menu.AddLabel("  ◣  " + NomeHeroi + "  Barrel Draw ◥");
-            Menu.Add("Draw-Barrel", new CheckBox("✖   " + NomeHeroi +       " [Barrel] - Explosion", true));
-            Menu.Add("Draw-BarrelExtend", new CheckBox("✖   " + NomeHeroi + " [Barrel] - Extended", true));
-            Menu.Add("Draw-Eexplosion", new CheckBox("✖   " + NomeHeroi +   " [Barrel] - Text", true));
-
-
-            Menu.AddGroupLabel("  ◣  " + NomeHeroi + " SkinHack  + BarrelSkin ◥");
-            Menu.Add("US", new CheckBox("✖   " + NomeHeroi + " [ON] SkinHack", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Farm 〉〉〉〉");
+            Menu.Add("AQ", new CheckBox("❐   " + NomeHeroi + " [Q] Auto KillSteal Jungle", true));
+            Menu.Add("QJ", new CheckBox("❐   " + NomeHeroi + " [Q] Jungle", true));
+            Menu.Add("QL", new CheckBox("❐   " + NomeHeroi + " [Q] LastHit", true));
+            Menu.Add("EF", new CheckBox("❐   " + NomeHeroi + " [E] Farm", true));
+            Menu.Add("QF", new CheckBox("❐   " + NomeHeroi + " [Q] Barrel Farm", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Draw 1 〉〉〉〉");
+            Menu.Add("Draw-Q", new CheckBox("❐   " + NomeHeroi + " [Q] - Range", true));
+            Menu.Add("Draw-E", new CheckBox("❐   " + NomeHeroi + " [E] - Range", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Draw 2 〉〉〉〉");
+            Menu.Add("Draw-Text", new CheckBox("❐   " + NomeHeroi + " [HP] - Track Enemies", true));
+            Menu.Add("Draw-JGHP", new CheckBox("❐   " + NomeHeroi + " [HP] - Track Jungle", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 Draw Barrel 〉〉〉〉");
+            Menu.Add("Draw-Barrel", new CheckBox("❐   " + NomeHeroi +       " [Barrel] - Explosion", true));
+            Menu.Add("Draw-BarrelExtend", new CheckBox("❐   " + NomeHeroi + " [Barrel] - Extended", true));
+            Menu.Add("Draw-Eexplosion", new CheckBox("❐   " + NomeHeroi +   " [Barrel] - Text", true));
+            Menu.AddLabel("______________________________________________________________________________________");
+            Menu.AddLabel("〈〈〈〈 SkinHack + Barrel Skin 〉〉〉〉");
+            Menu.Add("UseSkinHack", new CheckBox("❐ " + NomeHeroi + "  Use SkinHack", true));
+            Menu.Add("SkinLoad", new KeyBind("Load Skin / Carrega Skin", false, KeyBind.BindTypes.HoldActive, 'N'));
             var ID = new[] { "Classic Gangplank", "Spooky Gangplank", "Minuteman Gangplank", "Sailor Gangplank", "Toy Soldier Gangplank", "Special Forces Gangplank", "Sultan Gangplank", "Captain Gangplank" };
             var Skin = Menu.Add("SkinHack", new ComboBox(NomeHeroi, 6, ID));
             Skin.DisplayName = ID[Skin.CurrentValue];

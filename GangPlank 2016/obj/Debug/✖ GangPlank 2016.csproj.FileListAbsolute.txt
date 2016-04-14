@@ -1,0 +1,11 @@
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.exe.config
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.exe
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.pdb
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\SharpDX.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\obj\Debug\EloBuddy.exe
+C:\Users\Onix\Documents\Addons\EloBuddyAddon\GangPlank 2016\obj\Debug\EloBuddy.pdb
