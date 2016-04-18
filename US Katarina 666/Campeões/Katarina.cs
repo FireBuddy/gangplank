@@ -29,7 +29,7 @@ namespace EloBuddy
         public static string Status = "";
         public static string Checkar = "Surpressed";
         public static bool VerificarBuff = false;
-        public static Color colorSkin = Color.HotPink;
+        public static Color colorSkin = Color.Red;
         public static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Bold));
         public static Text Text1 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 20, System.Drawing.FontStyle.Bold));
         //-------------------------------------------------------------------------------------------------------Evento
@@ -70,7 +70,7 @@ namespace EloBuddy
             Menu.Add("E.C", new KeyBind("        ♯   Fast Changes [ Evade Mode ]", false, KeyBind.BindTypes.HoldActive, 'L'));
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Ward Jump");
             Menu.Add("W.J", new KeyBind("        ♯   Auto Ward & Jump [ E ] And Press ->", false, KeyBind.BindTypes.HoldActive, 'V'));
-            Hero.SetSkinId(4);//Set Skin Padrao
+            Hero.SetSkinId(5);//Set Skin Padrao
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇");
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Combo");
             Menu.Add("Q.1", new CheckBox("        ❖   " + HeroName + " - [ Q ] Enemy", true));
@@ -89,8 +89,8 @@ namespace EloBuddy
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇");
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ KillSteal");
             Menu.Add("K.S", new CheckBox("        ❖   " + HeroName + " - [ KS ] Enemy", true));
-            Menu.Add("K.W", new CheckBox("        ❖   " + HeroName + " - [ Jump ] To KS", true));
-            Menu.AddLabel("Use [ E ] Jump To Ward / Ally / Minions / Objects ");
+            Menu.Add("K.W", new CheckBox("        ❖   " + HeroName + " - [ Jump ] All Objects", true));
+            Menu.AddLabel("Use [ E ] Jump To Ward / Ally / Minions / Object, to get closes ");
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇");
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Farm");
             Menu.Add("F.L", new CheckBox("        ❖   " + HeroName + " - [ Q/W ] Farm", true));
@@ -104,7 +104,7 @@ namespace EloBuddy
             Menu.Add("D.E", new CheckBox("        ❖   " + HeroName + " - [ E ] Range", false));
             Menu.Add("D.R", new CheckBox("        ❖   " + HeroName + " - [ R ] Range", false));
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Draw 2");
-            Menu.Add("T.R", new CheckBox("        ❖   " + HeroName + " - [ Text ] Ultimate State", true));
+            Menu.Add("T.R", new CheckBox("        ❖   " + HeroName + " - [ Text ] Modes State", true));
             Menu.Add("T.N", new CheckBox("        ❖   " + HeroName + " - [ Circle ] Enemy Kill", true));
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇");
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Misc");
@@ -116,7 +116,6 @@ namespace EloBuddy
             // EVADE----------------------------------------------------------------------------------------------------
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Evade");
             Menu.Add("E.E", new CheckBox("        ❖   [ E ] Evade Spells [If possible]", false));
-           // Menu.Add("C.E", new CheckBox("        ❖   Aways ON [Not Recommend]", false));
             Menu.AddLabel("Important: Not Enabled during Combo Non Loses Kill");
            // Menu.AddSeparator(2);
             foreach (AIHeroClient Inimigo in EntityManager.Heroes.Enemies)
@@ -135,16 +134,18 @@ namespace EloBuddy
             // EVADE----------------------------------------------------------------------------------------------------
 
             Drawing.OnDraw += Game_OnDraw;
+            Drawing.OnDraw += Game_OnDraw1;
             Game.OnUpdate += Game_OnUpdate;
+            Game.OnUpdate += Game_OnUpdate1;
             Obj_AI_Base.OnProcessSpellCast += Evade;
             //Gapcloser.OnGapcloser += AntiGapcloserOnOnEnemyGapcloser;
+            //---------------------------------------------------------------------------------------------------Notificação
+            var Notificação = new EloBuddy.SDK.Notifications.SimpleNotification("UnrealSkill", "Katarina {666} Load 1.0");
+            EloBuddy.SDK.Notifications.Notifications.Show(Notificação, 5000);
         }
         //-------------------------------------------------------------------------------------------------------Update + Orbwalk
         private static void Game_OnUpdate(EventArgs args)
         {
-            SempreAtivo();//  Auto Interromper ult para KS
-            LoadingSkin();
-
             foreach (var buff in Hero.Buffs) {
                 if (buff.DisplayName == "KatarinaRSound")
                 {
@@ -161,8 +162,13 @@ namespace EloBuddy
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Jungle();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit)) LastHit();
         }
+        private static void Game_OnUpdate1(EventArgs args)
+        {
+            SempreAtivo();//  Auto Interromper ult para KS
+            LoadingSkin();
+        }
         //-------------------------------------------------------------------------------------------------------Farms + Combo + Ignity
-        #region "Farm/Combo"
+            #region "Farm/Combo"
         public static void Farm()
         {
             LastHit();
@@ -248,13 +254,21 @@ namespace EloBuddy
                 if (Ward2 != null) { if (E.IsReady()) E.Cast(Ward2); return; }
             }
 
-            //-------------------------------------------------------------------------------------------------------Muda Modo de Combo
+            //-------------------------------------------------------------------------------------------------------Muda Modos
             if (Menu.Get<KeyBind>("C.F").CurrentValue)
             {
                 switch (Menu["M.E1"].Cast<ComboBox>().CurrentValue)
                 {
                     case 0: Core.DelayAction(() => Menu["M.E1"].Cast<ComboBox>().CurrentValue = 1, 200); break;
                     case 1: Core.DelayAction(() => Menu["M.E1"].Cast<ComboBox>().CurrentValue = 0, 200); ; break;
+                }
+            }
+            if (Menu.Get<KeyBind>("E.C").CurrentValue)
+            {
+                switch (Menu["E.E"].Cast<CheckBox>().CurrentValue)
+                {
+                    case true: Core.DelayAction(() => Menu["E.E"].Cast<CheckBox>().CurrentValue = false, 200); break;
+                    case false : Core.DelayAction(() => Menu["E.E"].Cast<CheckBox>().CurrentValue = true, 200); ; break;
                 }
             }
             //-------------------------------------------------------------------------------------------------------KS
@@ -265,13 +279,13 @@ namespace EloBuddy
             var UseHumanize = Menu["H.K"].Cast<CheckBox>().CurrentValue;
             if (UseKS)
             {
-                var KS = EntityManager.Heroes.Enemies.Where(i => i.IsValidTarget(2000) && !i.IsDead && i.Health <= GetComboDamage(i)).FirstOrDefault();
+                var KS = EntityManager.Heroes.Enemies.Where(i => i.Position.Distance(Hero.Position) <= 2000 && !i.IsDead && i.Health <= GetComboDamage(i)).FirstOrDefault();
                 if (KS != null && KS.Distance(Hero.Position) <= Q.Range)
                 {
                     //Metodo 1 para KS Dentro do range
                     if (Q.IsReady()) Q.Cast(KS);
                     if (E.IsReady() && !UseHumanize) { Core.DelayAction(() => E.Cast(KS), 200); }
-                    else if (E.IsReady() && UseHumanize) { Core.DelayAction(() => E.Cast(KS), new Random().Next(HumanizeMin, HumanizeMax)); }
+                    else if (E.IsReady() && UseHumanize) { Core.DelayAction(() => E.Cast(KS), HumanizeMax); }
                     if (W.IsReady() && Q.IsOnCooldown && Hero.CountEnemiesInRange(W.Range) >= 1) W.Cast();
                     if (R.IsReady() && Hero.CountEnemiesInRange(W.Range) >= 1 && !E.IsReady() && !W.IsReady() && !Q.IsReady())
                     {
@@ -281,7 +295,7 @@ namespace EloBuddy
                     }
                 }
 
-                if (VerificarBuff == true && KS.Position.Distance(Hero.Position) > R.Range)
+              /*  if (VerificarBuff == true && KS.Position.Distance(Hero.Position) > R.Range)
                 {
                     E.Cast(KS);
                     Orbwalker.DisableMovement = false;
@@ -291,9 +305,9 @@ namespace EloBuddy
                 else if (KS.Position.Distance(Hero.Position) > R.Range)
                 {
                     E.Cast(KS);
-                }
+                }*/
 
-                if (KS != null && UseWardKS && KS.Distance(Hero.Position) > R.Range) //Metodo 2 para KS fora do range Use Jump Ward/Aliado/Inimigo
+                if (KS != null && UseWardKS && KS.Distance(Hero.Position) > R.Range && KS.HealthPercent <= 10) //Metodo 2 para KS fora do range Use Jump Ward/Aliado/Inimigo
                 {
                     var WardRangeDoAlvo = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.Name.ToLower().Contains("ward") && !m.IsDead && m.Position.Distance(KS.Position) < 600 && !KS.IsValidTarget(E.Range)).FirstOrDefault();
                     var PegarMinionsAlly = EntityManager.MinionsAndMonsters.AlliedMinions.Where(m => m.Position.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Position.Distance(KS.Position) < 600 && !KS.IsValidTarget(E.Range)).FirstOrDefault();
@@ -307,8 +321,8 @@ namespace EloBuddy
                 }
             }
             //-------------------------------------------------------------------------------------------------------AutoHarras
-            var AutoHarras = Menu["K.W"].Cast<CheckBox>().CurrentValue;
-            if (AutoHarras)
+            var AutoHarras = Menu["H.H"].Cast<CheckBox>().CurrentValue;
+            if (AutoHarras && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 var Inimigo = EntityManager.Heroes.Enemies.FirstOrDefault(i => i.IsValidTarget(Q.Range) && !i.IsDead);
                 if (Q.IsReady()) Q.Cast(Inimigo);
@@ -327,7 +341,6 @@ namespace EloBuddy
             var HabilidadeE = sender.Spellbook.GetSpell(SpellSlot.E).SData.Name.ToString();
             var HabilidadeR = sender.Spellbook.GetSpell(SpellSlot.R).SData.Name.ToString();
             var UseEvade = Menu["E.E"].Cast<CheckBox>().CurrentValue;
-            var UseAways = Menu["C.E"].Cast<CheckBox>().CurrentValue;
 
             var EvadeQ = Menu[Inimigo.ChampionName + "Q1"].Cast<CheckBox>().CurrentValue;
             var EvadeW = Menu[Inimigo.ChampionName + "W1"].Cast<CheckBox>().CurrentValue;
@@ -337,7 +350,7 @@ namespace EloBuddy
             //if (!UseAways)
             if (UseEvade && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                if (sender.Type == Hero.Type && sender.Team == Inimigo.Team && Hero.Distance(sender) <= 1300 || args.Target != null && args.Target.IsMe && sender.Team != Hero.Team)
+                if (sender.Type == Hero.Type && sender.Team == Inimigo.Team && Hero.Distance(sender) <= 1500 || args.Target != null && args.Target.IsMe && sender.Team != Hero.Team)
                 {
                     if (args.SData.Name == HabilidadeQ && EvadeQ) UsaE_Evade();
                     if (args.SData.Name == HabilidadeW && EvadeW) UsaE_Evade();
@@ -349,22 +362,16 @@ namespace EloBuddy
        static string SpellEvade = "";
         public static void UsaE_Evade()
         {
-            var Inimigo = EntityManager.Heroes.Enemies.Where(o => o.IsValidTarget(1000)).FirstOrDefault();
+            foreach (var Inimigo in EntityManager.Heroes.Enemies.Where(o => o.Distance(Hero.Position) <= 1500 && !o.IsDead))
+            {
 
-           foreach(var PegarMinionsAlly in EntityManager.MinionsAndMonsters.AlliedMinions.Where(m => m.Position.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Position.Distance(Inimigo.Position) >= 500))
-            {
+                var PegarMinionsAlly = EntityManager.MinionsAndMonsters.AlliedMinions.Where(m => m.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
+                var PegarMinionsEnemy = EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => m.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
+                var PegarAlly = EntityManager.Heroes.Allies.Where(m => m.Distance(Hero.Position) <= E.Range && !m.IsDead && !m.IsMe && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
+                var PegarWard = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.Name.ToLower().Contains("ward") && m.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
                 if (PegarMinionsAlly != null) { E.Cast(PegarMinionsAlly); Chat.Print("<b><font color =\"#FFFFFF\">|| Evade Spell Detected || </font><font color=\"#FF0000\">" + "[" + SpellEvade + "]" + "</font><font color =\"#FFFFFF\"> || </font></b>"); return; }
-            }
-            foreach (var PegarMinionsEnemy in EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => m.Position.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Position.Distance(Inimigo.Position) >= 500))
-            {
                 if (PegarMinionsEnemy != null) { E.Cast(PegarMinionsEnemy); Chat.Print("<b><font color =\"#FFFFFF\">|| Evade Spell Detected || </font><font color=\"#FF0000\">" + "[" + SpellEvade + "]" + "</font><font color =\"#FFFFFF\"> || </font></b>"); return; }
-            }
-            foreach (var PegarAlly in EntityManager.Heroes.Allies.Where(m => m.Position.Distance(Hero.Position) <= E.Range && !m.IsDead && !m.IsMe && !m.IsDead && m.Position.Distance(Inimigo.Position) >= 500))
-            {
                 if (PegarAlly != null) { E.Cast(PegarAlly); Chat.Print("<b><font color =\"#FFFFFF\">|| Evade Spell Detected || </font><font color=\"#FF0000\">" + "[" + SpellEvade + "]" + "</font><font color =\"#FFFFFF\"> || </font></b>"); return; }
-            }
-            foreach (var PegarWard in ObjectManager.Get<Obj_AI_Minion>().Where(m => m.Name.ToLower().Contains("ward") && m.Position.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Position.Distance(Inimigo.Position) >= 500))
-            {
                 if (PegarWard != null) { E.Cast(PegarWard); Chat.Print("<b><font color =\"#FFFFFF\">|| Evade Spell Detected || </font><font color=\"#FF0000\">" + "[" + SpellEvade + "]" + "</font><font color =\"#FFFFFF\"> || </font></b>"); return; }
             }
         }
@@ -388,14 +395,13 @@ namespace EloBuddy
                         case 8: Hero.SetSkinId(8); colorSkin = Color.Indigo; break;
                         case 9: Hero.SetSkinId(9); colorSkin = Color.MediumVioletRed; break;
                     }
-                }
-            
+                } 
         }
         //-------------------------------------------------------------------------------------------------------Draw
         private static void Game_OnDraw(EventArgs args)
         {
             if (Hero.IsDead) return;
-            var Inimigo = EntityManager.Heroes.Enemies.Where(i=> i.Distance(Hero.Position) <= 1000 && !i.IsDead && !i.IsZombie && !i.IsInvulnerable).FirstOrDefault();
+            var Inimigo = EntityManager.Heroes.Enemies.Where(i=> i.Position.Distance(Hero.Position) <= 1000 && !i.IsDead && !i.IsZombie && !i.IsInvulnerable).FirstOrDefault();
             if (true)
             {
                 if (Menu["T.R"].Cast<CheckBox>().CurrentValue)
@@ -404,7 +410,8 @@ namespace EloBuddy
                     if (R.State.ToString() == Checkar)
                     {
                         Status = "Yes";
-                        color = Color.LimeGreen;
+                        //color = Color.LimeGreen;
+                        color = colorSkin;
                     }
                     else
                     {
@@ -434,25 +441,41 @@ namespace EloBuddy
                     Text.Color = colorSkin;
                     Text.TextValue = Select.ToString();
                     Text.Draw();
+
+                    Text.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(30, -50);
+                    Text.Color = Color.WhiteSmoke;
+                    Text.TextValue = "Evade: ";
+                    Text.Draw();
+                    Text.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(-10, -50);
+                    Text.Color = colorSkin;
+                    Text.TextValue = Menu["E.E"].Cast<CheckBox>().CurrentValue.ToString();
+                    Text.Draw();
+
                 }
                 if (Menu["T.N"].Cast<CheckBox>().CurrentValue)// Informa par ao usuario que o Inimigo é Matavel
                 {
-                    foreach (var Get in EntityManager.Heroes.Enemies.Where(i => i.Distance(Hero.Position) <= 1200 && !i.IsDead && !i.IsZombie && !i.IsInvulnerable && i.Health <= GetComboDamage(i) && i.IsHPBarRendered == true))
+                    foreach (var Get in EntityManager.Heroes.Enemies.Where(i => i.Distance(Hero.Position) <= 2000 && !i.IsDead && !i.IsZombie && !i.IsInvulnerable && i.Health <= GetComboDamage(i) && i.IsHPBarRendered == true))
                     {
                         new Circle() { Color = colorSkin, BorderWidth = 7f, Radius = 100 }.Draw(Inimigo.Position);
                         new Circle() { Color = Color.Black, BorderWidth = 5f, Radius = 90 }.Draw(Inimigo.Position);
                         //Efeito 3D
                         Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(101, -58);
-                        Text1.Color = Color.WhiteSmoke;
+                        Text1.Color = Color.Black;
                         Text1.TextValue = "Prediction: Kill Enemy [Line]";
+                        Text1.Draw();
                         Text1.Position = Drawing.WorldToScreen(Player.Instance.Position) - new Vector2(100, -60);
                         Text1.Color = colorSkin;
                         Text1.TextValue = "Prediction: Kill Enemy [Line]";
                         Text1.Draw();
-                        Drawing.DrawLine(Hero.Position.WorldToScreen(), Get.Position.WorldToScreen(), 5f, colorSkin);  
+                        Drawing.DrawLine(Hero.Position.WorldToScreen(), Get.Position.WorldToScreen(), 5f, colorSkin);
                     }
                 }
             }
+        }
+        private static void Game_OnDraw1(EventArgs args)
+        {
+            if (Hero.IsDead) return;
+            var Inimigo = EntityManager.Heroes.Enemies.Where(i => i.Position.Distance(Hero.Position) <= 1000 && !i.IsDead && !i.IsZombie && !i.IsInvulnerable).FirstOrDefault();
 
             Drawing.DrawText(20, 20, System.Drawing.Color.WhiteSmoke, "Timer: " + DateTime.Now.ToShortTimeString(), 40);
             if (Menu["D.Q"].Cast<CheckBox>().CurrentValue)
@@ -460,9 +483,9 @@ namespace EloBuddy
                 new Circle() { Color = colorSkin, Radius = ObjectManager.Player.GetAutoAttackRange(), BorderWidth = 5f }.Draw(ObjectManager.Player.Position);
                 new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = Q.Range }.Draw(ObjectManager.Player.Position);
             }
-            if (Menu["D.W"].Cast<CheckBox>().CurrentValue)new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = W.Range }.Draw(ObjectManager.Player.Position);
+            if (Menu["D.W"].Cast<CheckBox>().CurrentValue) new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = W.Range }.Draw(ObjectManager.Player.Position);
             if (Menu["D.E"].Cast<CheckBox>().CurrentValue) new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = E.Range }.Draw(ObjectManager.Player.Position);
-            if (Menu["D.R"].Cast<CheckBox>().CurrentValue)new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = R.Range }.Draw(ObjectManager.Player.Position);
+            if (Menu["D.R"].Cast<CheckBox>().CurrentValue) new Circle() { Color = colorSkin, BorderWidth = 4f, Radius = R.Range }.Draw(ObjectManager.Player.Position);
 
             var PegarMinionsAlly = EntityManager.MinionsAndMonsters.AlliedMinions.Where(m => m.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
             var PegarMinionsEnemy = EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => m.Distance(Hero.Position) <= E.Range && !m.IsDead && m.Distance(Inimigo.Position) >= 500).FirstOrDefault();
