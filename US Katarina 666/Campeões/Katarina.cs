@@ -116,10 +116,9 @@ namespace EloBuddy
             // EVADE----------------------------------------------------------------------------------------------------
             Menu.AddLabel("⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇⑇ Evade");
             Menu.Add("E.E", new CheckBox("        ❖   [ E ] Evade Spells [If possible]", false));
-            Menu.Add("C.E", new CheckBox("        ❖   Aways ON [Not Recommend]", false));
-            Menu.AddLabel("Important: We recommend that you leave (❖ Always On ) Off Iran as suspicious");
-            Menu.AddLabel("But if you are connected It will Skill Dodge During the Combo also.");
-            Menu.AddSeparator(2);
+           // Menu.Add("C.E", new CheckBox("        ❖   Aways ON [Not Recommend]", false));
+            Menu.AddLabel("Important: Not Enabled during Combo Non Loses Kill");
+           // Menu.AddSeparator(2);
             foreach (AIHeroClient Inimigo in EntityManager.Heroes.Enemies)
             {
                 var HabilidadeQ = Inimigo.Spellbook.GetSpell(SpellSlot.Q).SData.Name.ToString();
@@ -335,7 +334,7 @@ namespace EloBuddy
             var EvadeE = Menu[Inimigo.ChampionName + "E1"].Cast<CheckBox>().CurrentValue;
             var EvadeR = Menu[Inimigo.ChampionName + "R1"].Cast<CheckBox>().CurrentValue;
 
-            if (!UseAways)
+            //if (!UseAways)
             if (UseEvade && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 if (sender.Type == Hero.Type && sender.Team == Inimigo.Team && Hero.Distance(sender) <= 1300 || args.Target != null && args.Target.IsMe && sender.Team != Hero.Team)
