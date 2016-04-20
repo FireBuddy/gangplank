@@ -103,7 +103,7 @@ namespace EloBuddy
             Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using [E] (Recommecd Secure)", 1, "Mode [Aggressive]", "Mode [Safe]", "Mode [GapCloser]"));
             Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method (Recommecd Aways)", 0, "Mode [Always]", "Mode [Combo]", "Never"));
             Menu.Add("AT", new CheckBox("❐   " + NomeHeroi + " - Catch [ Axe ] In Tower Enemy", false));
-            Menu.Add("CR", new Slider("Catch Axes Distance [ Cursor Mouse ]  (Recommend 255) ", 255, 210, 300));
+            Menu.Add("CR", new Slider("Catch Axes Distance [ Cursor Mouse ]  (Recommend 255) ", 255, 210, 700));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Combo");
             Menu.Add("Q", new CheckBox("❐   " + NomeHeroi + " - [ Q ]", true));
