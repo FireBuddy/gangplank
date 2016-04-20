@@ -29,6 +29,7 @@ namespace EloBuddy
         private static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 15, System.Drawing.FontStyle.Bold));
         private static Text Text0 = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 9, System.Drawing.FontStyle.Bold));
         static Item BOTRK, Bilgewater, Yumus, Mercurial, Bandana;   
+        public static Color color = Color.DarkOrange;
         private static int PassiveCount// Total Crédit PassiveCount - Darakath
         {
             get
@@ -91,45 +92,52 @@ namespace EloBuddy
             Menu.Add("DelayAX", new Slider("Delay Pick Axes Only - (Normal Mode)", 250, 0, 500));
             Menu.AddLabel("Config in Core > Ticks Per Second: 20 a 25 '");
             Menu.AddLabel("______________________________________________________________________________________");
-            Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
+            Menu.Add("UseSkinHack", new CheckBox("❐ " + NomeHeroi + "  Use SkinHack", true));
+            var Skin = Menu.Add("SkinHack", new ComboBox("✔ Select your Skin Hack", 6, "Classic Draven", "Soul Reaver Draven", "Gladiator Draven", "Primetime Draven", "Pool Party Draven", "Beast Hunter Draven", "Draven Draven"));
+            Skin.OnValueChange += delegate
+            {
+                var Notificação = new EloBuddy.SDK.Notifications.SimpleNotification("SkinHack" ,"New Select: "+ Skin.SelectedText);
+                EloBuddy.SDK.Notifications.Notifications.Show(Notificação, 5000);
+            };
+
             Menu.Add("ModeE", new ComboBox("✔ Select Game Mode Using [E] (Recommecd Secure)", 1, "Mode [Aggressive]", "Mode [Safe]", "Mode [GapCloser]"));
             Menu.Add("AxeGet", new ComboBox("✔ Select the Pick Axes Method (Recommecd Aways)", 0, "Mode [Always]", "Mode [Combo]", "Never"));
-            Menu.Add("AT", new CheckBox("✖   " + NomeHeroi + " - Catch [ Axe ] In Tower Enemy", false));
-            Menu.Add("CR", new Slider("Catch Axes Distance (Recommend 270) ", 370, 250, 400));
+            Menu.Add("AT", new CheckBox("❐   " + NomeHeroi + " - Catch [ Axe ] In Tower Enemy", false));
+            Menu.Add("CR", new Slider("Catch Axes Distance [ Cursor Mouse ]  (Recommend 255) ", 255, 210, 300));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Combo");
-            Menu.Add("Q", new CheckBox("✖   " + NomeHeroi + " - [ Q ]", true));
-            Menu.Add("W", new CheckBox("✖   " + NomeHeroi + " - [ W ] ", true));
-            Menu.Add("E", new CheckBox("✖   " + NomeHeroi + " - [ E ]", true));
-            Menu.Add("R", new CheckBox("✖   " + NomeHeroi + " - [ R ]", true));
+            Menu.Add("Q", new CheckBox("❐   " + NomeHeroi + " - [ Q ]", true));
+            Menu.Add("W", new CheckBox("❐   " + NomeHeroi + " - [ W ] ", true));
+            Menu.Add("E", new CheckBox("❐   " + NomeHeroi + " - [ E ]", true));
+            Menu.Add("R", new CheckBox("❐   " + NomeHeroi + " - [ R ]", true));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Farm");
-            Menu.Add("FF", new CheckBox("✖   " + NomeHeroi + " - [ Q ] Farm", true));
-            Menu.Add("FJ", new CheckBox("✖   " + NomeHeroi + " - [ Q ] Jungle", true));
+            Menu.Add("FF", new CheckBox("❐   " + NomeHeroi + " - [ Q ] Farm", true));
+            Menu.Add("FJ", new CheckBox("❐   " + NomeHeroi + " - [ Q ] Jungle", true));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Draw");
-            Menu.Add("DAX", new CheckBox("✖   " + NomeHeroi + " - [ Axe ] Radius", true));
-            Menu.Add("DE", new CheckBox("✖   " + NomeHeroi + " - [ E ] Range",  true));
-            Menu.Add("DK", new CheckBox("✖   " + NomeHeroi + " - [ Text ] Kill", true));
-            Menu.Add("DM", new CheckBox("✖   " + NomeHeroi + " - [ Text ] Modes", true));
-            Menu.Add("DCR", new CheckBox("✖   " + NomeHeroi + " - [ Radius ] Catch Axe", true));
+            Menu.Add("DAX", new CheckBox("❐   " + NomeHeroi + " - [ Axe ] Radius", true));
+            Menu.Add("DE", new CheckBox("❐   " + NomeHeroi + " - [ E ] Range",  true));
+            Menu.Add("DK", new CheckBox("❐   " + NomeHeroi + " - [ Text ] Kill", true));
+            Menu.Add("DM", new CheckBox("❐   " + NomeHeroi + " - [ Text ] Modes", true));
+            Menu.Add("DCR", new CheckBox("❐   " + NomeHeroi + " - [ Radius ] Catch Axe", true));
             Menu.AddLabel("______________________________________________________________________________________");
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  Misc");
             Menu.AddLabel("Important: For Him Not Spending ability to Allies Clear them in");
             Menu.AddLabel("Menu EB > Core > GapCloser = Clear its Allies are Marked");
-            Menu.Add("EG", new CheckBox("✖   " + NomeHeroi + " - [ E ] Ant-Gapcloser", true));
-            Menu.Add("EI", new CheckBox("✖   " + NomeHeroi + " - [ E ] Interrupt", true));
+            Menu.Add("EG", new CheckBox("❐   " + NomeHeroi + " - [ E ] Ant-Gapcloser", true));
+            Menu.Add("EI", new CheckBox("❐   " + NomeHeroi + " - [ E ] Interrupt", true));
 
             Menu.AddLabel("  ◣  " + NomeHeroi + "  ◥  KillSteal & Item");
-            Menu.Add("KS", new CheckBox("✖   " + NomeHeroi + " - [ E & R ] KS", true));
-            Menu.Add("IT", new CheckBox("✖   " + NomeHeroi + " - [ Items ] Use", true));
+            Menu.Add("KS", new CheckBox("❐   " + NomeHeroi + " - [ E & R ] KS", true));
+            Menu.Add("IT", new CheckBox("❐   " + NomeHeroi + " - [ Items ] Use", true));
             Menu.AddLabel("______________________________________________________________________________________");
             Drawing.OnDraw += Draw;
             Game.OnUpdate += UpdateGame;
             Gapcloser.OnGapcloser += AntiGapcloserOnOnEnemyGapcloser;
             Interrupter.OnInterruptableSpell += Interrupter2OnOnInterruptableTarget;
 
-            var version = "1.3";
+            var version = "1.4";
             Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " || ", Color.DeepPink);
             Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.WhiteSmoke);
             Chat.Print("|| Draven 2016 || UnrealSkill99|| " + version + " ||", Color.DeepSkyBlue);
@@ -145,12 +153,33 @@ namespace EloBuddy
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) Farm(); 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) Farm(); //Jungle(); 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) if (Inimigo != null) Combo(); 
-            PegarMachados(); KS(); SempreAtivo(Ini); }
+                SempreAtivo(Ini); }
             catch (Exception Eror) { }
         }
         private static void SempreAtivo(Obj_AI_Base Inimigo)
         {
+            PegarMachados();
+            KS();
             if (W.IsReady() && Player.HasBuffOfType(BuffType.Slow) && Inimigo.Distance(Hero.Position) <= Hero.GetAutoAttackRange()) Core.DelayAction(()=> W.Cast(), 200);
+            var SkinHackSelect = Menu["SkinHack"].Cast<ComboBox>().CurrentValue;
+            if (Menu["UseSkinHack"].Cast<CheckBox>().CurrentValue && Hero.SkinId != SkinHackSelect)
+            {
+                //if (Menu.Get<KeyBind>("SkinLoad").CurrentValue)
+                //{
+                switch (SkinHackSelect)
+                {
+                    default: color = Color.AntiqueWhite; break;
+                    case 0: Hero.SetSkinId(0); color = Color.AntiqueWhite; break;
+                    case 1: Hero.SetSkinId(1); color = Color.CornflowerBlue; break;
+                    case 2: Hero.SetSkinId(2); color = Color.DarkOrange; break;
+                    case 3: Hero.SetSkinId(3); color = Color.Red; break;
+                    case 4: Hero.SetSkinId(4); color = Color.Yellow; break;
+                    case 5: Hero.SetSkinId(5); color = Color.Maroon; break;
+                    case 6: Hero.SetSkinId(6); color = Color.LimeGreen; break;
+                }
+                Chat.Print("|| SkinHack Load || <font color='#84e2ab'>Carregado / Load ModelHack " + SkinHackSelect.ToString() + "</font>", System.Drawing.Color.White);
+                // }
+            }
         }
       /*  private static void Jungle()
         {
@@ -204,8 +233,10 @@ namespace EloBuddy
             var ModoDesafiante = Menu["ModeAxe"].Cast<ComboBox>().CurrentValue;
             var DelayAxe = Menu["DelayAX"].Cast<Slider>().CurrentValue;
             var RadiusCatch = Menu["CR"].Cast<Slider>().CurrentValue;
-            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && !EntityManager.Turrets.Enemies.Any(t=> t.IsValidTarget(1100)) && x.Distance(Hero.Position) <= RadiusCatch).OrderBy(x => Game.CursorPos.Distance(x.Position) <= 550))//.OrderBy(x => x.Position.Distance(Hero.Position)))
-            {
+            Vector3 Mouse = Game.CursorPos;
+            foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && !EntityManager.Turrets.Enemies.Any(t => t.IsValidTarget(1100))))
+          //foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead && !EntityManager.Turrets.Enemies.Any(t => t.IsValidTarget(1100)) && x.Distance(Hero.Position) <= RadiusCatch).OrderBy(x => Game.CursorPos.Distance(x.Position) <= 550))//.OrderBy(x => x.Position.Distance(Hero.Position)))
+                {
                 if (ModoDesafiante == 1)//Normal
                 {
                     Orbwalker.DisableMovement = false;
@@ -221,7 +252,7 @@ namespace EloBuddy
                             }
                             break;
                         case 0:
-                            if (AXE.Position.Distance(Hero.Position) > 110)
+                            if (AXE.Position.Distance(Hero.Position) > 110 && AXE.Distance(Mouse) <= RadiusCatch)
                             {
                                 Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), DelayAxe);
                                 Orbwalker.DisableMovement = true;
@@ -247,7 +278,7 @@ namespace EloBuddy
                             }
                             break;
                         case 0:
-                            if (AXE.Distance(Hero.Position) > 100)
+                            if (AXE.Distance(Hero.Position) > 100 && AXE.Distance(Mouse) <= RadiusCatch)
                             {
                                 //Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200);
                                 var Go = 0;
@@ -267,22 +298,22 @@ namespace EloBuddy
                     {
                         default: break;
                         case 1:
-                            if (AXE.Distance(Hero.Position) > 110 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                            if (AXE.Distance(Hero.Position) > 140 && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                             {
                                 var Go = 0;
                                 if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
                                 if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
                             }
-                            else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
+                            else if (AXE.Distance(Hero.Position) < 135) Orbwalker.DisableMovement = false;
                             break;
                         case 0:
-                            if (AXE.Distance(Hero.Position) > 110)
+                            if (AXE.Distance(Hero.Position) > 140 && AXE.Distance(Mouse) <= RadiusCatch)
                             {
                                var Go = 0;
                                if (Go == 0) Core.DelayAction(() => Orbwalker.OrbwalkTo(AXE.Position), 200); Go = 1;
                                if (Go == 1) Orbwalker.DisableMovement = true; Orbwalker.DisableMovement = false; Core.DelayAction(() => Go = 0, 350);
                             }
-                            else if (AXE.Distance(Hero.Position) < 100) Orbwalker.DisableMovement = false;
+                            else if (AXE.Distance(Hero.Position) < 135) Orbwalker.DisableMovement = false;
                             break;
                         case 2:
                             break;
@@ -308,39 +339,28 @@ namespace EloBuddy
         private static void Draw(EventArgs args)
         {
             if (Hero.IsDead) return;
-            var SkinHackSelect = Menu["SkinHack"].Cast<ComboBox>().CurrentValue;
-            Color color;
-            switch (SkinHackSelect)
-            {
-                default : color = Color.AntiqueWhite; break;  
-                case 0: Hero.SetSkinId(0); color = Color.AntiqueWhite; break;
-                case 1: Hero.SetSkinId(1); color = Color.CornflowerBlue; break;
-                case 2: Hero.SetSkinId(2); color = Color.DarkOrange;  break;
-                case 3: Hero.SetSkinId(3);  color = Color.Red;   break;
-                case 4: Hero.SetSkinId(4);color = Color.Yellow; break;
-                case 5: Hero.SetSkinId(5);  color = Color.Maroon;  break;
-                case 6: Hero.SetSkinId(6); color = Color.LimeGreen; break;
-            }
-
             var DrawE = Menu["DE"].Cast<CheckBox>().CurrentValue;
             var DrawAX = Menu["DAX"].Cast<CheckBox>().CurrentValue;
-            if (DrawE) { new Circle() { Color = color, BorderWidth = 1f, Radius = E.Range }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = 1050 - 3 }.Draw(Hero.Position); }
-            if (DrawAX) { new Circle() { Color = color, BorderWidth = 1f, Radius = Hero.GetAutoAttackRange() }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = Hero.GetAutoAttackRange() - 3 }.Draw(Hero.Position); }
+            if (DrawE) { new Circle() { Color = color, BorderWidth = 3f, Radius = E.Range }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 5f, Radius = 1050 - 3 }.Draw(Hero.Position); }
+            if (DrawAX) { new Circle() { Color = color, BorderWidth = 3f, Radius = Hero.GetAutoAttackRange() }.Draw(Hero.Position); new Circle() { Color = Color.Black, BorderWidth = 5f, Radius = Hero.GetAutoAttackRange() - 3 }.Draw(Hero.Position); }
+
+          //  var RadiusCatch = Menu["CR"].Cast<Slider>().CurrentValue;
+            //new Circle() { Color = color, BorderWidth = 1f, Radius = RadiusCatch }.Draw(Game.CursorPos);
 
             var DrawRC = Menu["DCR"].Cast<CheckBox>().CurrentValue;
             var DrawRCA = Menu["CR"].Cast<Slider>().CurrentValue;
             if (DrawAX && DrawRC)
             {
-                new Circle() { Color = color, BorderWidth = 1f, Radius = DrawRCA }.Draw(Hero.Position);
-                new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = DrawRCA -3 }.Draw(Hero.Position);
+                new Circle() { Color = color, BorderWidth = 2f, Radius = DrawRCA }.Draw(Game.CursorPos);
+                new Circle() { Color = Color.Black, BorderWidth = 5f, Radius = DrawRCA -3 }.Draw(Game.CursorPos);
             }
                 foreach (var AXE in ObjectManager.Get<GameObject>().Where(x => x.Name.Equals("Draven_Base_Q_reticle_self.troy") && !x.IsDead))
             {
                 if (DrawAX)
                 {
-                    new Circle() { Color = color, BorderWidth = 3f, Radius = 140 }.Draw(AXE.Position);
-                    new Circle() { Color = Color.Black, BorderWidth = 3f, Radius = 137 }.Draw(AXE.Position);
-                    Drawing.DrawLine(Hero.Position.WorldToScreen(), AXE.Position.WorldToScreen(), 5f, Color.FromArgb(80, color));
+                    new Circle() { Color = color, BorderWidth = 5f, Radius = 140 }.Draw(AXE.Position);
+                    new Circle() { Color = Color.Black, BorderWidth = 5f, Radius = 137 }.Draw(AXE.Position);
+                    Drawing.DrawLine(Hero.Position.WorldToScreen(), AXE.Position.WorldToScreen(), 8f, Color.FromArgb(80, color));
                 }
             }
 
@@ -458,19 +478,16 @@ namespace EloBuddy
         {
             var EMode = Menu["ModeE"].Cast<ComboBox>().CurrentValue;
             var UseEInterrupt = Menu["EI"].Cast<CheckBox>().CurrentValue;
-            if (!sender.IsValidTarget()) return;
-            if (EMode == 2 || UseEInterrupt) {
-                if (Hero.Distance(gapcloser.Sender) <= E.Range && sender.IsEnemy)
-                {
+            if (EMode == 2 || UseEInterrupt && sender.Type == Hero.Type && sender.Team != sender.Team && Hero.Distance(sender) <= E.Range)
+           {
                     E.Cast(gapcloser.Sender);
-                }
-            }
+           }
+            
         }
         private static void Interrupter2OnOnInterruptableTarget(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
             var UseEGapcloser = Menu["EG"].Cast<CheckBox>().CurrentValue;
-            if (!UseEGapcloser || !sender.IsValidTarget()) return;
-            if (Hero.Distance(sender) <= E.Range && sender.IsEnemy)
+            if (UseEGapcloser && sender.Type == Hero.Type && sender.Team != sender.Team && Hero.Distance(sender) <= E.Range)
             {
                 E.Cast(sender);
             }
