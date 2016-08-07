@@ -346,7 +346,7 @@ namespace UnrealSkill
 
             if (true)
             {
-                if (barrels.Any() && Q.IsReady())
+                if (barrels.Any())
                 {
                     var detoneateTargetBarrels = barrels.Where(b => b.Distance(player) <= Q.Range);
                     if (true)//Auto Atirar no Barril se detectado Inimigo Dentro
@@ -356,7 +356,7 @@ namespace UnrealSkill
                             foreach (var detoneateTargetBarrel in detoneateTargetBarrels)
                             {
                                 if (!KillableBarrel(detoneateTargetBarrel)) continue;
-                                if (detoneateTargetBarrel.Distance(target) < BarrelExplosionRange && target.Distance(detoneateTargetBarrel.Position) < BarrelExplosionRange)
+                                if (Q.IsReady() && detoneateTargetBarrel.Distance(target) < BarrelExplosionRange && target.Distance(detoneateTargetBarrel.Position) < BarrelExplosionRange)
                                 {
                                     NaoUsaQ = true;
                                     Q.Cast(detoneateTargetBarrel);
@@ -369,9 +369,16 @@ namespace UnrealSkill
                                     {
                                         if (detoneateTargetBarrelSecond.Distance(target) <= BarrelExplosionRange && target.Distance(detoneateTargetBarrelSecond.Position) <= BarrelExplosionRange)
                                         {
-                                            NaoUsaQ = true;
-                                            Q.Cast(detoneateTargetBarrel);
-                                            return;
+                                            if (Q.IsReady())
+                                            {
+                                                NaoUsaQ = true;
+                                                Q.Cast(detoneateTargetBarrel);
+                                                return;
+                                            }
+                                            else if (detoneateTargetBarrel.Distance(Player.Instance) <  Player.Instance.GetAutoAttackRange)
+                                            {
+                                                
+                                            }
                                         }
                                     }
                                 }
