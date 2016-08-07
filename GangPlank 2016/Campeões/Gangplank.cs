@@ -375,7 +375,7 @@ namespace UnrealSkill
                                                 Q.Cast(detoneateTargetBarrel);
                                                 return;
                                             }
-                                            //else if (detoneateTargetBarrel.Distance(Player.Instance) <  Player.Instance.GetAutoAttackRange)
+                                            else if (detoneateTargetBarrel.Distance(Player.Instance.Position) <  Player.Instance.GetAutoAttackRange)
                                             {
                                                 
                                             }
