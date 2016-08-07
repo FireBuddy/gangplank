@@ -35,7 +35,7 @@ namespace UnrealSkill
         public static readonly Obj_AI_Base InimigoGlobal;
         public static bool justQ, justE;
         public Vector3 ePos;
-        public const int BarrelExplosionRange = 350;
+        public const int BarrelExplosionRange = 300;
         public const int BarrelConnectionRange = 700;
         public static List<Barrel> savedBarrels = new List<Barrel>();
         public static Text Text = new EloBuddy.SDK.Rendering.Text("", new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 10, System.Drawing.FontStyle.Bold));
