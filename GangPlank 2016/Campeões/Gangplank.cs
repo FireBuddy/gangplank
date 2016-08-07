@@ -377,7 +377,7 @@ namespace UnrealSkill
                                             }
                                             else if (detoneateTargetBarrel.Distance(Player.Instance) < 250)
                                             {
-                                                
+                                                 Player.IssueOrder(GameObjectOrder.AttackUnit, detoneateTargetBarrel);  
                                             }
                                         }
                                     }
